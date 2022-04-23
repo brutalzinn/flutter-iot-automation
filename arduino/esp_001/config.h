@@ -1,12 +1,12 @@
 
-#define WIFI_SSID "paes"
-#define WIFI_PASS "garfield laranja"
-const char* mqttserver = "192.168.0.35";
+#define WIFI_SSID ""
+#define WIFI_PASS ""
+const char* mqttserver = "";
 const int mqttserverport = 1883;
-const char* mqttuser = "teste";
-const char* mqttpass = "teste";
-const char* MQTTQUEUEINPUT = "topic/ventilador/entrada";
-const char* MQTTQUEUEOUTPUT = "topic/ventilador/saida";
+const char* mqttuser = "";
+const char* mqttpass = "";
+const char* MQTTQUEUEINPUT = "";
+const char* MQTTQUEUEOUTPUT = "";
 long interval = 5000;
 IPAddress ip(192,168,0,98);
 IPAddress gateway(192,168,0,1);
