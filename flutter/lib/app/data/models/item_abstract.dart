@@ -2,12 +2,9 @@ import '../enums/item_enum.dart';
 import 'mqtt_connection.dart';
 
 abstract class ItemAbstract extends MQTTConnection{
-   abstract String itemTitle;
-   abstract ItemType itemType;
-   abstract String payload;
-  
-   abstract Function onMessage;
-   abstract Function onError;
+  String itemTitle = "";
+  ItemType? itemType;
+  String payload = "";
 
    void executeMQTT();
 }
