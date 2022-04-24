@@ -1,36 +1,32 @@
 // ignore_for_file: avoid_print
 
 import 'dart:io';
-
 import 'package:mqtt_client/mqtt_client.dart';
+import '../model/mqtt_client_config.dart';
 
-class MQTTConnection
+class MQTTClient 
 {
-  String? mQTTHost;
-  int? mQTTPORT;
-  String? mQTTUSER;
-  String? mQTTPASSWORD;
-  String? mQTTID;
-  dynamic onEvent; //deveria ser um function()?
-  late MqttClient client;
 
+final MQTTConnection config;
 
-  MQTTConnection({this.mQTTHost, this.mQTTPORT, this.mQTTUSER, this.mQTTID, this.mQTTPASSWORD, this.onEvent});
+MQTTClient({required this.config});
 
-  void connect() async {
-  client = MqttClient(mQTTHost ?? "", mQTTID ?? "");
-  client.port = mQTTPORT;
+Future sendMessage(String message, String topic) async {
+  
+  MqttClient client = MqttClient(config.mQTTHost, config.mQTTID );
+  client.port = config.mQTTPORT;
 
-  client.onDisconnected = onEvent;
-  client.onConnected = onEvent;
-  client.onSubscribed = onEvent;
-
+  client.onDisconnected = config.onEvent;
+  client.onConnected = config.onEvent;
+  client.onSubscribed = config.onEvent;
+ 
   final connMess = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .withWillTopic('willtopic') // If you set this you must set a will message
-      .withWillMessage('My Will message')
+      .withClientIdentifier(config.mQTTID)
+      .withWillTopic(topic) // If you set this you must set a will message
+      .withWillMessage(message)
       .startClean() // Non persistent session for testing
       .withWillQos(MqttQos.atLeastOnce);
+
   print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
     try {
@@ -53,10 +49,8 @@ class MQTTConnection
     client.disconnect();
     exit(-1);
   }
-  
-
-
-
 }
 
+
+  //method to handle homeassistant message here
 }

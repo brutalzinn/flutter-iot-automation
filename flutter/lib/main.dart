@@ -1,18 +1,14 @@
+import 'package:application/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'app/ui/theme/app_theme.dart';
 
-
-void main() async {
-  await GetStorage.init();
-  await Get.putAsync(() => AppConfigService().init());
-  await Get.putAsync(() => AuthService().init());
+void main() {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: Routes.SPLASH,
-    defaultTransition: Transition.fade,
+    initialRoute: Routes.INITIAL,
     theme: appThemeData,
-    initialBinding: SplashBinding(),
+    defaultTransition: Transition.fade,
     getPages: AppPages.pages,
-    home: SplashPage(),
   ));
 }
