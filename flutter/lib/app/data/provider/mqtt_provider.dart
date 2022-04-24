@@ -11,7 +11,7 @@ final MQTTConnection config;
 
 MQTTClient({required this.config});
 
-Future sendMessage(String message, String topic) async {
+Future<bool> sendMessage(String message, String topic) async {
   
   MqttClient client = MqttClient(config.mQTTHost, config.mQTTID );
   client.port = config.mQTTPORT;
@@ -49,6 +49,8 @@ Future sendMessage(String message, String topic) async {
     client.disconnect();
     exit(-1);
   }
+
+  return false;
 }
 
 

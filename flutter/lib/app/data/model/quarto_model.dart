@@ -1,9 +1,9 @@
 import 'dart:convert';
 //mudar nome dessa classe
-List<Bedroom> BedroomFromJson(String str) =>
+List<Bedroom> bedroomFromJson(String str) =>
     List<Bedroom>.from(json.decode(str).map((x) => Bedroom.fromJson(x)));
 
-String BedroomToJson(List<Bedroom> data) =>
+String bedroomToJson(List<Bedroom> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Bedroom {

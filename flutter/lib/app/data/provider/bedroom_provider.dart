@@ -1,8 +1,9 @@
 import 'package:application/app/data/model/quarto_model.dart';
-import 'package:application/app/database/quartos_service.dart';
+import 'package:application/app/database/bedroom_service.dart';
 import 'package:get/get.dart';
 
 class BedRoomProvider {
+  
   final bedroomServices = Get.find<BedroomsService>();
 
   Future<List<Bedroom>> getAll() async {

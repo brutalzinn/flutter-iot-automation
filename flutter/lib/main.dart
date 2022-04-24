@@ -1,4 +1,4 @@
-import 'package:application/app/database/quartos_service.dart';
+import 'package:application/app/database/bedroom_service.dart';
 import 'package:application/app/ui/android/home/home_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'GetX SQLite Tutorial',
+      title: 'HomeAssistant e Flutter - Teste',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

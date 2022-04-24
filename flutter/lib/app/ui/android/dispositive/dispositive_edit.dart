@@ -1,12 +1,12 @@
-import 'package:application/app/ui/android/home/controller/home_controller.dart';
+import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeEditPage extends GetView<HomeController> {
+class DispositiveEditPage extends GetView<DispositiveController> {
   @override
-  final controller = Get.find<HomeController>();
+  final controller = Get.find<DispositiveController>();
 
-  HomeEditPage({Key? key}) : super(key: key);
+  DispositiveEditPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,23 @@ class HomeEditPage extends GetView<HomeController> {
                   labelText: 'Descrição',
                 ),
                 controller: controller.descricaoController,
+                focusNode: controller.contentFocusNode,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (String value) {
+                  controller.editMode();
+                  if (controller.loading.value == true) {
+                    Get.dialog(const Center(child: CircularProgressIndicator()));
+                  }
+                },
+                validator: (value) {
+                  return controller.validarConteudo(value);
+                },
+              ),
+                 TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT HOST',
+                ),
+                controller: controller.nomeController,
                 focusNode: controller.contentFocusNode,
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (String value) {

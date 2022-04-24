@@ -4,7 +4,8 @@ part './app_routes.dart';
 
 class AppPages {
   static final pages = [
-    GetPage(
-        name: Routes.INITIAL, page: () => HomeListPage())
+    GetPage(name: Routes.initial, page: () => HomeListPage()),
+    GetPage(name: Routes.initial, page: () => HomeListPage())
+        
   ];
 }
