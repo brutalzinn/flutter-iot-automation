@@ -1,6 +1,6 @@
 import 'package:application/app/data/model/quarto_model.dart';
+import 'package:application/app/database/database_service.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 //mudar nome dessa classe
@@ -8,35 +8,10 @@ class BedroomsService extends GetxService {
   //o banco de dados declarado como late sera inicializado na primeira leitura
   late Database db;
 
-  Future<BedroomsService> init() async {
-    db = await _getDatabase();
-    //criar nota de teste
-    // final note = Note(
-    //   title: 't1',
-    //   content: 'c1',
-    // );
-    // await save(note);
-    // await getAll();
+ Future<BedroomsService> init() async {
+    final dispositiveServices = Get.find<DatabaseService>();
+    db = dispositiveServices.getDatabaseDb();
     return this;
-  }
-
-  Future<Database> _getDatabase() async {
-    // Recupera pasta da aplicacao
-    var databasesPath = await getDatabasesPath();
-    // Recupera caminho da database e excluir database
-    // String path = join(databasesPath, 'notes.db');
-    // descomente o await abaixo para excluir a base de dados do caminho
-    // recuperado pelo path na inicializacao
-    // await deleteDatabase(path);
-    // Retorna o banco de dados aberto
-    return db = await openDatabase(
-      join(databasesPath, 'notes.db'),
-      onCreate: (db, version) {
-        return db.execute(
-            'CREATE TABLE bedrooms (id INTEGER PRIMARY KEY, nome TEXT, descricao TEXT)');
-      },
-      version: 1,
-    );
   }
 
   // recuperar todas as notas

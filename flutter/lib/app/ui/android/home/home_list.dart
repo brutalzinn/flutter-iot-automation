@@ -8,8 +8,9 @@ import 'package:get/get.dart';
 class HomeListPage extends GetView<HomeController> {
 
   final homeController = Get.put(HomeController(BedRoomRepository(BedRoomProvider())));
-  // final dispositiveController = Get.put(DispositiveController(DispositiveRepository(DispositiveProvider())));
 
+  HomeListPage({Key? key}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +29,7 @@ class HomeListPage extends GetView<HomeController> {
             title: Text(homeController.noteList[index].nome),
             onLongPress: () {
                 //exibir dispositivos
-                Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id);
+                Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id!);
             },
             trailing: Wrap(children: <Widget>[
               IconButton(

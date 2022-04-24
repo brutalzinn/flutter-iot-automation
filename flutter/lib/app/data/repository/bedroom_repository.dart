@@ -4,6 +4,7 @@ import 'package:application/app/data/provider/bedroom_provider.dart';
 class BedRoomRepository {
 
   final BedRoomProvider api;
+  
   BedRoomRepository(this.api);
 
   getAll() {
