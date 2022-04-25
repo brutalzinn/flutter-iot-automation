@@ -32,7 +32,7 @@ class HomeEditPage extends GetView<HomeController> {
                   controller.contentFocusNode.requestFocus();
                 },
                 validator: (value) {
-                  return controller.validarTitulo(value);
+                  return controller.validarTitulo(value, "Preencha o campo Cômodo");
                 },
               ),
               TextFormField(
@@ -48,9 +48,9 @@ class HomeEditPage extends GetView<HomeController> {
                     Get.dialog(const Center(child: CircularProgressIndicator()));
                   }
                 },
-                validator: (value) {
-                  return controller.validarConteudo(value);
-                },
+                // validator: (value) {
+                //   return controller.validarConteudo(value);
+                // },
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

@@ -44,40 +44,44 @@ class DispositiveController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    getAll();
+    getAll(Get.parameters['room'] as int);
   }
 
   //recuperar todas as notas
-  getAll() {
+  getAll(int bedRoomId) {
     loading(true);
-    repository.getAll(Get.arguments).then((data) {
+    repository.getAll(bedRoomId).then((data) {
       deviceList.value = data;
       loading(false);
     });
   }
 
   //tratar formulario para inclusao de uma nota
-  addNote() {
+  addNote(int bedRoomId) {
     formKey.currentState?.reset();
     nomeController.text = '';
     descricaoController.text = '';
-    titulo = 'Incluir Nota';
-    Get.to(() => DispositiveEditPage());
+    titulo = 'Adicionar dispositivo';
+    Get.offAllNamed("/devices?room=$bedRoomId&id=null");
+
+    //Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":null});
   }
 
   //tratar formulario para edicao de uma nota passando id via arguments
-  editNote(Dispositive note) {
+  editNote(int bedRoomId, Dispositive note) {
     nomeController.text = note.nome;
     descricaoController.text = note.descricao;
     titulo = 'Editar Dispositivo';
-    Get.to(() => DispositiveEditPage(), arguments: note.id);
+    Get.offAllNamed("/devices?room=$bedRoomId&id=${note.id}");
+
+   // Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":note.id});
   }
 
   editMode() {
     contentFocusNode.unfocus();
     if (formKey.currentState!.validate()) {
       loading(true);
-      if (Get.arguments == null) {
+      if (Get.parameters['id'] == null) {
         saveNote();
       } else {
         updateNote();
@@ -87,11 +91,12 @@ class DispositiveController extends GetxController {
 
   saveNote() async {
     final device = Dispositive(
+      roomId: Get.parameters['room'] as int,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
     );
-    repository.save(device, Get.arguments).then((data) {
+    repository.save(device).then((data) {
       loading(false);
       refreshNoteList();
     });
@@ -99,13 +104,14 @@ class DispositiveController extends GetxController {
 
   updateNote() async {
     final device = Dispositive(
-      id: Get.arguments,
+      id: Get.parameters['id'] as int,
+      roomId: Get.parameters['room'] as int,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
-      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
+      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
 
     );
-    repository.update(device, Get.arguments).then((data) {
+    repository.update(device).then((data) {
       loading(false);
       refreshNoteList();
     });
@@ -121,7 +127,7 @@ class DispositiveController extends GetxController {
 
     refreshNoteList() {
     // recuperar lista de notas
-    getAll();
+    getAll(Get.arguments);
     //fechar dialog
     Get.back();
     //voltar para a lista de notas
@@ -137,10 +143,10 @@ class DispositiveController extends GetxController {
   }
 
   //validar campo conteudo
-  validarConteudo(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Preencha o campo Conteúdo.';
-    }
-    return null;
-  }
+  // validarConteudo(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Preencha o campo Conteúdo.';
+  //   }
+  //   return null;
+  // }
 }

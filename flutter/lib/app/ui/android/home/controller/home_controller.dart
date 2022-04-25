@@ -119,18 +119,18 @@ class HomeController extends GetxController {
   }
 
   // validar campo titulo
-  validarTitulo(String? value) {
+  validarTitulo(String? value, String message) {
     if (value == null || value.isEmpty) {
-      return 'Preencha o campo Título.';
+      return message;
     }
     return null;
   }
 
   //validar campo conteudo
-  validarConteudo(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Preencha o campo Conteúdo.';
-    }
-    return null;
-  }
+  // validarConteudo(String? value) {
+  //   if (value == null || value.isEmpty) {
+  //     return 'Preencha o campo Conteúdo.';
+  //   }
+  //   return null;
+  // }
 }

@@ -29,7 +29,10 @@ class HomeListPage extends GetView<HomeController> {
             title: Text(homeController.noteList[index].nome),
             onLongPress: () {
                 //exibir dispositivos
-                Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id!);
+                //Get.offAllNamed("/NextScreen?device=phone&id=354&name=Enzo");
+                Get.offAllNamed("/devices?room=${homeController.noteList[index].id}&id=null");
+
+                //Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id!);
             },
             trailing: Wrap(children: <Widget>[
               IconButton(

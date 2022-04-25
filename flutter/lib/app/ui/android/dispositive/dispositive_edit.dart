@@ -14,14 +14,13 @@ class DispositiveEditPage extends GetView<DispositiveController> {
       appBar: AppBar(title: Text(controller.titulo)),
       body: Form(
         key: controller.formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TextFormField(
+            TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Cômodo',
+                  labelText: 'Nome',
                 ),
                 controller: controller.nomeController,
                 focusNode: controller.titleFocusNode,
@@ -31,44 +30,100 @@ class DispositiveEditPage extends GetView<DispositiveController> {
                 onFieldSubmitted: (String value) {
                   controller.contentFocusNode.requestFocus();
                 },
-                validator: (value) {
-                  return controller.validarTitulo(value);
-                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                 ),
                 controller: controller.descricaoController,
-                focusNode: controller.contentFocusNode,
-                textInputAction: TextInputAction.done,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
                 onFieldSubmitted: (String value) {
-                  controller.editMode();
-                  if (controller.loading.value == true) {
-                    Get.dialog(const Center(child: CircularProgressIndicator()));
-                  }
-                },
-                validator: (value) {
-                  return controller.validarConteudo(value);
+                  controller.contentFocusNode.requestFocus();
                 },
               ),
-                 TextFormField(
+                TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT HOST',
                 ),
-                controller: controller.nomeController,
-                focusNode: controller.contentFocusNode,
-                textInputAction: TextInputAction.done,
+                controller: controller.mqttHostController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
                 onFieldSubmitted: (String value) {
-                  controller.editMode();
-                  if (controller.loading.value == true) {
-                    Get.dialog(const Center(child: CircularProgressIndicator()));
-                  }
-                },
-                validator: (value) {
-                  return controller.validarConteudo(value);
+                  controller.contentFocusNode.requestFocus();
                 },
               ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT PORT',
+                ),
+                controller: controller.mqttPortController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
+                onFieldSubmitted: (String value) {
+                  controller.contentFocusNode.requestFocus();
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT Id',
+                ),
+                controller: controller.mqttIdUserController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
+                onFieldSubmitted: (String value) {
+                  controller.contentFocusNode.requestFocus();
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT TOPIC',
+                ),
+                controller: controller.mqttTopicController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
+                onFieldSubmitted: (String value) {
+                  controller.contentFocusNode.requestFocus();
+                },
+              ),
+
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT USER',
+                ),
+                controller: controller.mqttUserController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
+                onFieldSubmitted: (String value) {
+                  controller.contentFocusNode.requestFocus();
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT PASSWORD',
+                ),
+                controller: controller.mqttPasswordController,
+                focusNode: controller.titleFocusNode,
+                textInputAction: TextInputAction.next,
+            
+                onEditingComplete: controller.contentFocusNode.requestFocus,
+                onFieldSubmitted: (String value) {
+                  controller.contentFocusNode.requestFocus();
+                },
+              ),
+              
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: SizedBox(

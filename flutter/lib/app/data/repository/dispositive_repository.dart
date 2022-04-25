@@ -13,12 +13,12 @@ class DispositiveRepository {
     return api.getAllByBedRoom(bedRoomId);
   }
 
-  save(Dispositive device, int room_id) {
-    return api.save(device, room_id);
+  save(Dispositive device) {
+    return api.save(device);
   }
 
-  update(Dispositive device, int room_id) {
-    return api.update(device, room_id);
+  update(Dispositive device) {
+    return api.update(device);
   }
 
   delete(int id) {

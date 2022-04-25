@@ -11,6 +11,7 @@ String dispositivoToJson(List<Dispositive> data) =>
 class Dispositive {
   Dispositive({
     this.id,
+    this.roomId,
     required this.nome,
     required this.descricao,
     required this.mqttConfig
@@ -19,12 +20,14 @@ class Dispositive {
   int? id;
   String nome;
   String descricao;
+  int? roomId;
   MQTTConnection mqttConfig;
 
   factory Dispositive.fromJson(Map<String, dynamic> json) => Dispositive(
         id: json["id"],
         nome: json["nome"],
-        descricao: json["descricao"], 
+        descricao: json["descricao"],
+        roomId: json["roomId"],
         mqttConfig: MQTTConnection.fromJson(json["mqttConfig"])
       );
 
@@ -32,20 +35,22 @@ class Dispositive {
         "id": id,
         "nome": nome,
         "descricao": descricao,
+        "roomId": roomId,
         "mqttConfig": mqttConfig.toJson(),
-
       };
 
   Dispositive copy({
     int? id,
     String? nome,
     String? descricao,
+    int? roomId,
     MQTTConnection? mqttConfig
   }) =>
       Dispositive(
         id: id ?? this.id,
         nome: nome ?? this.nome,
         descricao: descricao ?? this.descricao,
+        roomId: roomId ?? this.roomId,
         mqttConfig: mqttConfig ?? this.mqttConfig,
       );
 }

@@ -22,20 +22,20 @@ class DispositiveService extends GetxService {
   }
 
   //criar nova nota
-  Future<Dispositive> save(Dispositive device, int roomId) async {
+  Future<Dispositive> save(Dispositive device) async {
     final id = await db.rawInsert(
-        'INSERT INTO devices (nome, descricao, room_id) VALUES (?,?, ?)',
-        [device.nome, device.descricao, roomId]);
+        'INSERT INTO devices (room_id, nome, descricao, mqtthost, mqttport, mqttuser, mqttpassword, mqttid, mqtttopic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [device.roomId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
 
     print(id);
     return device.copy(id: id);
   }
 
   //atualizar nota
-  Future<Dispositive> update(Dispositive device, int roomId) async {
+  Future<Dispositive> update(Dispositive device) async {
     final id = await db.rawUpdate(
         'UPDATE devices SET nome = ?, descricao = ?, room_id = ? WHERE id = ?',
-        [device.nome, device.descricao, roomId, device.id]);
+        [device.nome, device.descricao, device.roomId, device.id]);
 
     print(id);
     return device.copy(id: id);

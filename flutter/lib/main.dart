@@ -1,6 +1,7 @@
 import 'package:application/app/database/bedroom_service.dart';
 import 'package:application/app/database/database_service.dart';
 import 'package:application/app/database/dispositive_service.dart';
+import 'package:application/app/routes/app_pages.dart';
 import 'package:application/app/ui/android/home/home_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeListPage(),
+      initialRoute: '/',
+      getPages: AppPages.pages
     );
   }
 }
