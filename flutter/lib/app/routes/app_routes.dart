@@ -2,7 +2,9 @@ part of './app_pages.dart';
 
 abstract class Routes{
 
-  static const initial = '/';
-  static const devices = '/devices';
+  static const home = '/';
+  static const devicesList = '/devices/:roomId';
+  static const devicesEdit = '/devices/';
+
 
 }

@@ -8,9 +8,10 @@ class DispositiveListPage extends GetView<DispositiveController> {
 
   @override
   final controller = Get.put(DispositiveController(DispositiveRepository(DispositiveProvider())));
+  final roomId = int.parse(Get.parameters['roomId']!);
 
   DispositiveListPage({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +19,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
       body: Obx(() {
         if (controller.loading.value == true) {
           return const Center(
-            child: const CircularProgressIndicator(),
+            child: CircularProgressIndicator(),
           );
         }
         return ListView.builder(
@@ -29,7 +30,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  controller.editNote(Get.parameters['room'] as int, controller.deviceList[index]);
+                  controller.editNote(controller.deviceList[index]);
                 },
               ),
               IconButton(
@@ -56,7 +57,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          controller.addNote(Get.arguments);
+          controller.addNote(roomId);
         },
       ),
     );

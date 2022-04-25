@@ -40,11 +40,13 @@ class DispositiveController extends GetxController {
   FocusNode titleFocusNode = FocusNode();
   FocusNode contentFocusNode = FocusNode();
 
+
   //recuperar notas para apresentar na tela inicial
   @override
   void onReady() async {
+    final roomId = int.parse(Get.parameters['roomId']!);
     super.onReady();
-    getAll(Get.parameters['room'] as int);
+    getAll(roomId);
   }
 
   //recuperar todas as notas
@@ -62,19 +64,15 @@ class DispositiveController extends GetxController {
     nomeController.text = '';
     descricaoController.text = '';
     titulo = 'Adicionar dispositivo';
-    Get.offAllNamed("/devices?room=$bedRoomId&id=null");
-
-    //Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":null});
+    Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":null});
   }
 
   //tratar formulario para edicao de uma nota passando id via arguments
-  editNote(int bedRoomId, Dispositive note) {
+  editNote(Dispositive note) {
     nomeController.text = note.nome;
     descricaoController.text = note.descricao;
     titulo = 'Editar Dispositivo';
-    Get.offAllNamed("/devices?room=$bedRoomId&id=${note.id}");
-
-   // Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":note.id});
+    Get.to(() => DispositiveEditPage(), arguments: {"room":note.roomId, "id":note.id});
   }
 
   editMode() {
@@ -91,7 +89,7 @@ class DispositiveController extends GetxController {
 
   saveNote() async {
     final device = Dispositive(
-      roomId: Get.parameters['room'] as int,
+      roomId: Get.arguments['room'] as int,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
@@ -104,8 +102,8 @@ class DispositiveController extends GetxController {
 
   updateNote() async {
     final device = Dispositive(
-      id: Get.parameters['id'] as int,
-      roomId: Get.parameters['room'] as int,
+      id: Get.arguments['id'] as int,
+      roomId: Get.arguments['room'] as int,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
@@ -127,7 +125,7 @@ class DispositiveController extends GetxController {
 
     refreshNoteList() {
     // recuperar lista de notas
-    getAll(Get.arguments);
+    getAll(Get.parameters['room'] as int);
     //fechar dialog
     Get.back();
     //voltar para a lista de notas
