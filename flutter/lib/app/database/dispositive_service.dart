@@ -18,13 +18,14 @@ class DispositiveService extends GetxService {
   Future<List<Dispositive>> getAllByBedRoom(int bedRoomId) async {
     final result = await db.rawQuery('SELECT * FROM devices WHERE room_id = ? ORDER BY id',[bedRoomId]);
     print("tentando obter com id do comodo ${bedRoomId}");
+    print(result);
     return result.map((json) => Dispositive.fromJson(json)).toList();
   }
 
   //criar nova nota
   Future<Dispositive> save(Dispositive device) async {
     final id = await db.rawInsert(
-        'INSERT INTO devices (room_id, nome, descricao, mqtthost, mqttport, mqttuser, mqttpassword, mqttid, mqtttopic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO devices (room_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [device.roomId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
 
     print(id);

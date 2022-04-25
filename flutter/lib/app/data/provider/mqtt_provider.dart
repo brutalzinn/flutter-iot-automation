@@ -16,9 +16,9 @@ Future<bool> sendMessage(String message, String topic) async {
   MqttClient client = MqttClient(config.mQTTHost, config.mQTTID );
   client.port = config.mQTTPORT;
 
-  client.onDisconnected = config.onEvent;
-  client.onConnected = config.onEvent;
-  client.onSubscribed = config.onEvent;
+  // client.onDisconnected = config.onEvent;
+  // client.onConnected = config.onEvent;
+  // client.onSubscribed = config.onEvent;
  
   final connMess = MqttConnectMessage()
       .withClientIdentifier(config.mQTTID)

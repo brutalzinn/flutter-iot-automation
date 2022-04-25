@@ -16,85 +16,57 @@ class DispositiveEditPage extends GetView<DispositiveController> {
         key: controller.formKey,
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
             TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                 ),
                 controller: controller.nomeController,
-                focusNode: controller.titleFocusNode,
+                focusNode: controller.nomeFocusNode,
                 textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+          
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                 ),
                 controller: controller.descricaoController,
-                focusNode: controller.titleFocusNode,
+                focusNode: controller.descricaoFocusNode,
                 textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+          
               ),
                 TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT HOST',
                 ),
                 controller: controller.mqttHostController,
-                focusNode: controller.titleFocusNode,
+                focusNode: controller.mqttHostFocusNode,
                 textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT PORT',
                 ),
                 controller: controller.mqttPortController,
-                focusNode: controller.titleFocusNode,
+                focusNode: controller.mqttPortFocusNode,
                 textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT Id',
                 ),
                 controller: controller.mqttIdUserController,
-                focusNode: controller.titleFocusNode,
-                textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+                focusNode: controller.mqttIdUserFocusNode,
+                textInputAction: TextInputAction.next
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT TOPIC',
                 ),
                 controller: controller.mqttTopicController,
-                focusNode: controller.titleFocusNode,
-                textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+                focusNode: controller.mqttTopicFocusNode,
+                textInputAction: TextInputAction.next
               ),
 
               TextFormField(
@@ -102,26 +74,16 @@ class DispositiveEditPage extends GetView<DispositiveController> {
                   labelText: 'MQTT USER',
                 ),
                 controller: controller.mqttUserController,
-                focusNode: controller.titleFocusNode,
-                textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+                focusNode: controller.mqttUserFocusNode,
+                textInputAction: TextInputAction.next
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT PASSWORD',
                 ),
                 controller: controller.mqttPasswordController,
-                focusNode: controller.titleFocusNode,
-                textInputAction: TextInputAction.next,
-            
-                onEditingComplete: controller.contentFocusNode.requestFocus,
-                onFieldSubmitted: (String value) {
-                  controller.contentFocusNode.requestFocus();
-                },
+                focusNode: controller.mqttPasswordFocusNode,
+                textInputAction: TextInputAction.next
               ),
               
               Padding(

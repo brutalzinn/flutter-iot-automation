@@ -24,6 +24,8 @@ class DispositiveController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositive>[].obs;
 
+  final roomId = int.parse(Get.parameters['roomId']!);
+
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
@@ -37,14 +39,19 @@ class DispositiveController extends GetxController {
   TextEditingController mqttTopicController = TextEditingController();
 
   //---
-  FocusNode titleFocusNode = FocusNode();
-  FocusNode contentFocusNode = FocusNode();
+  FocusNode nomeFocusNode = FocusNode();
+  FocusNode descricaoFocusNode = FocusNode();
+  FocusNode mqttHostFocusNode = FocusNode();
+  FocusNode mqttPasswordFocusNode = FocusNode();
+  FocusNode mqttUserFocusNode = FocusNode();
+  FocusNode mqttPortFocusNode = FocusNode();
+  FocusNode mqttIdUserFocusNode = FocusNode();
+  FocusNode mqttTopicFocusNode = FocusNode();
 
 
   //recuperar notas para apresentar na tela inicial
   @override
   void onReady() async {
-    final roomId = int.parse(Get.parameters['roomId']!);
     super.onReady();
     getAll(roomId);
   }
@@ -59,12 +66,12 @@ class DispositiveController extends GetxController {
   }
 
   //tratar formulario para inclusao de uma nota
-  addNote(int bedRoomId) {
+  addNote() {
     formKey.currentState?.reset();
     nomeController.text = '';
     descricaoController.text = '';
     titulo = 'Adicionar dispositivo';
-    Get.to(() => DispositiveEditPage(), arguments: {"room":bedRoomId, "id":null});
+    Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
 
   //tratar formulario para edicao de uma nota passando id via arguments
@@ -76,7 +83,6 @@ class DispositiveController extends GetxController {
   }
 
   editMode() {
-    contentFocusNode.unfocus();
     if (formKey.currentState!.validate()) {
       loading(true);
       if (Get.parameters['id'] == null) {
@@ -89,10 +95,10 @@ class DispositiveController extends GetxController {
 
   saveNote() async {
     final device = Dispositive(
-      roomId: Get.arguments['room'] as int,
+      roomId: roomId,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
-      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
+      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
     );
     repository.save(device).then((data) {
       loading(false);
@@ -103,7 +109,7 @@ class DispositiveController extends GetxController {
   updateNote() async {
     final device = Dispositive(
       id: Get.arguments['id'] as int,
-      roomId: Get.arguments['room'] as int,
+      roomId: roomId,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
@@ -125,7 +131,7 @@ class DispositiveController extends GetxController {
 
     refreshNoteList() {
     // recuperar lista de notas
-    getAll(Get.parameters['room'] as int);
+    getAll(roomId);
     //fechar dialog
     Get.back();
     //voltar para a lista de notas

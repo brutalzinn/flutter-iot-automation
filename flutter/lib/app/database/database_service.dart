@@ -17,15 +17,15 @@ late Database db;
   
     var databasesPath = await getDatabasesPath();
     //--TESTE--
-    // String path = join(databasesPath, 'iot_devices.db');
-    // await deleteDatabase(path);
+    String path = join(databasesPath, 'iot_devices.db');
+    await deleteDatabase(path);
     //---
     return db = await openDatabase(join(databasesPath, 'iot_devices.db'), 
     onCreate: (db, version) async {
          await db.execute(
           '''CREATE TABLE devices (id INTEGER PRIMARY KEY, room_id INTEGER, nome TEXT, descricao TEXT,
-           mqtthost TEXT, mqttport INTEGER, mqttuser TEXT, 
-           mqttpassword TEXT, mqttid TEXT, mqtttopic TEXT)''');
+           mqtt_host TEXT, mqtt_port INTEGER, mqtt_user TEXT, 
+           mqtt_password TEXT, mqtt_id TEXT, mqtt_topic TEXT)''');
          await db.execute(
           '''CREATE TABLE bedrooms (id INTEGER PRIMARY KEY, nome TEXT, descricao TEXT)''');
       },

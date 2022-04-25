@@ -27,8 +27,14 @@ class Dispositive {
         id: json["id"],
         nome: json["nome"],
         descricao: json["descricao"],
-        roomId: json["roomId"],
-        mqttConfig: MQTTConnection.fromJson(json["mqttConfig"])
+        roomId: json["roomId"] ?? -1,
+        mqttConfig: MQTTConnection(
+        mQTTHost: json["mqtt_host"],
+        mQTTPASSWORD: json["mqtt_password"],
+        mqTTtopic: json["mqtt_topic"], 
+        mQTTID: json["mqtt_id"], 
+        mQTTPORT: json["mqtt_port"],
+        mQTTUSER: json["mqtt_user"])
       );
 
   Map<String, dynamic> toJson() => {

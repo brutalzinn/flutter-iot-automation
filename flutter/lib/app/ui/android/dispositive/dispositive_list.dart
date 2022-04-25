@@ -8,8 +8,8 @@ class DispositiveListPage extends GetView<DispositiveController> {
 
   @override
   final controller = Get.put(DispositiveController(DispositiveRepository(DispositiveProvider())));
-  final roomId = int.parse(Get.parameters['roomId']!);
-
+  //final roomId = int.parse(Get.parameters['roomId']!);
+  
   DispositiveListPage({Key? key}) : super(key: key);
   
   @override
@@ -57,7 +57,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          controller.addNote(roomId);
+          controller.addNote();
         },
       ),
     );
