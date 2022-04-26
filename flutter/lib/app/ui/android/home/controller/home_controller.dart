@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   //variavel do titulo
   String titulo = '';
 
+  int selectedIndex = 0;
   //variavel que controla o loading
   RxBool loading = false.obs;
 
