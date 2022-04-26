@@ -27,5 +27,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       getPages: AppPages.pages
     );
+   
   }
 }

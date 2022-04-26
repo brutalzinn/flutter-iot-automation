@@ -17,8 +17,8 @@ late Database db;
   
     var databasesPath = await getDatabasesPath();
     //--TESTE--
-    String path = join(databasesPath, 'iot_devices.db');
-    await deleteDatabase(path);
+    // String path = join(databasesPath, 'iot_devices.db');
+    // await deleteDatabase(path);
     //---
     return db = await openDatabase(join(databasesPath, 'iot_devices.db'), 
     onCreate: (db, version) async {

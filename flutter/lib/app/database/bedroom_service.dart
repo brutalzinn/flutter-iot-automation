@@ -41,11 +41,10 @@ class BedroomsService extends GetxService {
     return note.copy(id: id);
   }
 
-  //excluir nota
   Future<int> delete(int noteId) async {
+    //não criei as relações ainda.
+    await db.rawDelete('DELETE FROM devices WHERE room_id = ?', [noteId]);
     final id = await db.rawDelete('DELETE FROM bedrooms WHERE id = ?', [noteId]);
-
-    print(id);
     return id;
   }
 

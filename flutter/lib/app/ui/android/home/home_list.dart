@@ -14,7 +14,7 @@ class HomeListPage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de cômodos')),
+
       body: Obx(() {
         //para testar melhor o loading, descomente a future delayed
         //no provider pra simular uma pequena demora no retorno da requisicao

@@ -18,7 +18,6 @@ class DispositiveService extends GetxService {
   Future<List<Dispositive>> getAllByBedRoom(int bedRoomId) async {
     final result = await db.rawQuery('SELECT * FROM devices WHERE room_id = ? ORDER BY id',[bedRoomId]);
     print("tentando obter com id do comodo ${bedRoomId}");
-    print(result);
     return result.map((json) => Dispositive.fromJson(json)).toList();
   }
 
