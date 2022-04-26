@@ -28,22 +28,24 @@ class MenuListPage extends GetView<HomeController> {
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: Text("Gerenciador de IOT - MQTT"),
+        title: const Text("Gerenciador de IOT - MQTT"),
       ),
-      drawer: Drawer(
+      drawer: Obx(() => Drawer(
         child: Column(
         children: <Widget> [
-          const ListTile(title:Text("Home")),
+          ListTile(
+          title: const Text("Home"),
+          onTap: () {
+              Get.toNamed("/");
+          }),
           ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: homeController.noteList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(
             title: Text(homeController.noteList[index].nome),
-            onLongPress: () {
-                //exibir dispositivos
+            onTap: () {
                 Get.toNamed("/devices/${homeController.noteList[index].id}");
-              //  Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id!);
             },
             trailing: Wrap(children: <Widget>[
               IconButton(
@@ -52,32 +54,37 @@ class MenuListPage extends GetView<HomeController> {
                   homeController.editNote(homeController.noteList[index]);
                 },
               ),
-              // IconButton(
-              //     icon: const Icon(Icons.delete),
-              //     onPressed: () {
-              //       Get.defaultDialog(
-              //           title: 'Excluir Nota',
-              //           middleText:
-              //               'Excluir cômodo ${homeController.noteList[index].nome}? Todos os seus dispositivos serão apagados.',
-              //           textCancel: 'Voltar',
-              //           onConfirm: () {
-              //             homeController.deleteNote(homeController.noteList[index].id!);
-              //             if (homeController.loading.value == true) {
-              //               Get.dialog(
-              //                 const Center(child: CircularProgressIndicator()),
-              //               );
-              //             }
-              //           });
-              //     }),
+              IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    Get.defaultDialog(
+                        title: 'Excluir Nota',
+                        middleText:
+                            'Excluir cômodo ${homeController.noteList[index].nome}? Todos os seus dispositivos serão apagados.',
+                        textCancel: 'Voltar',
+                        onConfirm: () {
+                          homeController.deleteNote(homeController.noteList[index].id!);
+                          if (homeController.loading.value == true) {
+                            Get.dialog(
+                              const Center(child: CircularProgressIndicator()),
+                            );
+                          }
+                        });
+                        
+                  }),
             ]),
           ),
       ),
-      
-      
+        
+       
       ],
       ),
-      ),
-      // body: HomeListPage(),
+      
+      )),
+    body:   FloatingActionButton(child: const Icon(Icons.add),
+          onPressed: () {
+          homeController.addNote();
+            },),
     );  
   }
 }
