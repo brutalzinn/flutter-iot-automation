@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:application/app/data/model/dispositive_model.dart';
-import 'package:application/app/data/model/mqtt_client_config.dart';
-import 'package:application/app/data/model/quarto_model.dart';
+import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_edit.dart';
-import 'package:application/app/ui/android/home/home_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

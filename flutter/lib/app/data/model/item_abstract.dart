@@ -1,7 +1,7 @@
 
-import 'package:application/app/data/enum/item_enum.dart';
+import 'package:application/app/data/enum/device_type.dart';
 import 'package:flutter/material.dart';
-import 'mqtt_client_config.dart';
+import 'mqtt_connection.dart';
 
 abstract class ItemAbstract
 {
@@ -14,7 +14,7 @@ abstract class ItemAbstract
 
   abstract String itemTitle;
 
-  abstract ItemType itemType;
+  abstract DeviceType itemType;
   
   Widget getView();
 

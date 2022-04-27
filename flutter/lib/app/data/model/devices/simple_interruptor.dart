@@ -1,10 +1,10 @@
 
 
 
-import 'package:application/app/data/enum/item_enum.dart';
-import 'package:application/app/data/enum/item_enum_extension.dart';
+import 'package:application/app/data/enum/device_type.dart';
+import 'package:application/app/data/enum/device_type_extension.dart';
 import 'package:application/app/data/model/item_abstract.dart';
-import 'package:application/app/data/model/mqtt_client_config.dart';
+import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:flutter/material.dart';
 
 class SimpleInterruptor extends ItemAbstract
@@ -19,7 +19,7 @@ class SimpleInterruptor extends ItemAbstract
   String itemTitle = "Interruptor Simples";
 
   @override
-  ItemType itemType = ItemType.simpleToggle;
+  DeviceType itemType = DeviceType.simpleToggle;
 
   SimpleInterruptor(topic) : super(topic);
 
@@ -33,7 +33,7 @@ class SimpleInterruptor extends ItemAbstract
   @override
   Widget getView() {
     // TODO: implement getView
-    throw UnimplementedError();
+    return const Text("teste");
   }
 
 

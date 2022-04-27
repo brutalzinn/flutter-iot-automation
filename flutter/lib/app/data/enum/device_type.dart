@@ -1,4 +1,4 @@
-enum ItemType
+enum DeviceType
 {
   simpleSwitch,
   simpleToggle,

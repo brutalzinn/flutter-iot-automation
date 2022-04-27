@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:application/app/data/model/mqtt_client_config.dart';
+import 'package:application/app/data/model/mqtt_connection.dart';
 //mudar nome dessa classe
 List<Dispositive> dispositivoFromJson(String str) =>
     List<Dispositive>.from(json.decode(str).map((x) => Dispositive.fromJson(x)));

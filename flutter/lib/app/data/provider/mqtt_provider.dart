@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-import '../model/mqtt_client_config.dart';
+import '../model/mqtt_connection.dart';
 
 class MQTTClient 
 {
