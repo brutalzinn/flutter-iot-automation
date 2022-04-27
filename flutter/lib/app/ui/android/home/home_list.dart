@@ -45,7 +45,7 @@ class HomeListPage extends GetView<HomeController> {
                     Get.defaultDialog(
                         title: 'Excluir Nota',
                         middleText:
-                            'Excluir cômodo ${homeController.noteList[index].nome}? Todos os seus dispositivos serão apagados.',
+                            'Excluir ambiente ${homeController.noteList[index].nome}? Todos os seus dispositivos serão apagados.',
                         textCancel: 'Voltar',
                         onConfirm: () {
                           homeController.deleteNote(homeController.noteList[index].id!);

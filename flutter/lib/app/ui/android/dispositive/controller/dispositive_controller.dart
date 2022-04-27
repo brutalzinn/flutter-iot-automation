@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class DispositiveController extends GetxController {
 
   final DispositiveRepository repository;
-  
+
   DispositiveController(this.repository);
 
   //variavel do titulo
@@ -21,19 +21,20 @@ class DispositiveController extends GetxController {
   final deviceList = <Dispositive>[].obs;
 
   final roomId = int.parse(Get.parameters['roomId']!);
-
+  final tipoDevice = Rx<int>(0);
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
-  //---
+
+  //-MQTT--
   TextEditingController mqttHostController = TextEditingController();
   TextEditingController mqttPasswordController = TextEditingController();
   TextEditingController mqttUserController = TextEditingController();
   TextEditingController mqttPortController = TextEditingController();
   TextEditingController mqttIdUserController = TextEditingController();
   TextEditingController mqttTopicController = TextEditingController();
-
+  
   //---
   FocusNode nomeFocusNode = FocusNode();
   FocusNode descricaoFocusNode = FocusNode();
@@ -92,9 +93,10 @@ class DispositiveController extends GetxController {
   saveNote() async {
     final device = Dispositive(
       roomId: roomId,
+      tipoId: tipoDevice.value,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
-      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
+      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
     );
     repository.save(device).then((data) {
       loading(false);
@@ -106,6 +108,7 @@ class DispositiveController extends GetxController {
     final device = Dispositive(
       id: Get.arguments['id'] as int,
       roomId: roomId,
+      tipoId: tipoDevice.value,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())

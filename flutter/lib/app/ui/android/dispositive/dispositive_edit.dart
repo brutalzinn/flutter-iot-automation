@@ -1,4 +1,3 @@
-import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
 import 'package:application/app/ui/android/widgets/dropdown_widget_devices_type.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +19,14 @@ class DispositiveEditPage extends GetView<DispositiveController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-
-            DropDownDeviceType(value:DeviceType.simpleSwitch, onChange: (value){
-            print("Selecionando ${value}");
-              }),
+            DropDownDeviceType(
+            deviceType:controller.tipoDevice.value, 
+            onChange: (value){
+            if(controller.tipoDevice.value != value){
+             controller.tipoDevice.value = value;
+            }
+              print("Selecionando ${value}");            
+            }),
             TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Nome',
@@ -42,7 +45,7 @@ class DispositiveEditPage extends GetView<DispositiveController> {
                 textInputAction: TextInputAction.next,
           
               ),
-                TextFormField(
+              TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT HOST',
                 ),

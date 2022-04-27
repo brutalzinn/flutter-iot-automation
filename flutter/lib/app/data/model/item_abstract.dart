@@ -1,22 +1,15 @@
 
-import 'package:application/app/data/enum/device_type.dart';
+import 'package:application/app/data/model/dispositive_model.dart';
 import 'package:flutter/material.dart';
-import 'mqtt_connection.dart';
-
 abstract class ItemAbstract
 {
+  final Dispositive dispositive;
 
-  abstract String message;
+  ItemAbstract({required this.dispositive});
 
-  abstract String topic;
-
-  ItemAbstract(topic);
-
-  abstract String itemTitle;
-
-  abstract DeviceType itemType;
-  
   Widget getView();
 
-  void executeMQTT(String topic, MQTTConnection connection);
+  Widget getCustomOption();
+
+  void executeMQTT(dispositive);
 }

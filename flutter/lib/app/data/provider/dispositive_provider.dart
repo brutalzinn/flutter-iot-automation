@@ -20,19 +20,19 @@ class DispositiveProvider {
 
   Future<Dispositive> save(Dispositive device) async {
     //descomente a linha abaixo para simular um tempo maior de resposta
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
     return await dispositiveServices.save(device);
   }
 
   Future<Dispositive> update(Dispositive device) async {
     //descomente a linha abaixo para simular um tempo maior de resposta
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
     return await dispositiveServices.update(device);
   }
 
   Future<int> delete(int noteId) async {
     //descomente a linha abaixo para simular um tempo maior de resposta
-    await Future.delayed(const Duration(seconds: 2));
+    //await Future.delayed(const Duration(seconds: 2));
     return await dispositiveServices.delete(noteId);
   }
 }

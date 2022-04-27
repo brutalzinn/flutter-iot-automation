@@ -39,7 +39,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
                     Get.defaultDialog(
                         title: 'Excluir dispositivo',
                         middleText:
-                            'Excluir dispositivo ${controller.deviceList[index].nome}? Todos os seus dispositivos serão apagados.',
+                            'Excluir dispositivo ${controller.deviceList[index].nome}?',
                         textCancel: 'Voltar',
                         onConfirm: () {
                           controller.deleteNote(controller.deviceList[index].id!);

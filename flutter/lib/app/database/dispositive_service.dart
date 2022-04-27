@@ -24,28 +24,23 @@ class DispositiveService extends GetxService {
   //criar nova nota
   Future<Dispositive> save(Dispositive device) async {
     final id = await db.rawInsert(
-        'INSERT INTO devices (room_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [device.roomId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
-
-    print(id);
+        'INSERT INTO devices (room_id, tipo_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [device.roomId, device.tipoId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
     return device.copy(id: id);
   }
 
   //atualizar nota
   Future<Dispositive> update(Dispositive device) async {
     final id = await db.rawUpdate(
-        'UPDATE devices SET nome = ?, descricao = ?, room_id = ? WHERE id = ?',
-        [device.nome, device.descricao, device.roomId, device.id]);
+        'UPDATE devices SET tipo_id = ?, nome = ?, descricao = ?, room_id = ? WHERE id = ?',
+        [device.tipoId, device.nome, device.descricao, device.roomId, device.id]);
 
-    print(id);
     return device.copy(id: id);
   }
 
   //excluir nota
   Future<int> delete(int noteId) async {
     final id = await db.rawDelete('DELETE FROM devices WHERE id = ?', [noteId]);
-
-    print(id);
     return id;
   }
 

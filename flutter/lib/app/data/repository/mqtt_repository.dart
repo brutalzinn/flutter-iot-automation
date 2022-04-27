@@ -6,7 +6,7 @@ class MQTTRepository {
 
   MQTTRepository({required this.mqttClient});
 
-  sendMessage(ItemAbstract item) {
-    return mqttClient.sendMessage(item.message, item.topic);
+  sendMessage(String message, ItemAbstract item) {
+    return mqttClient.sendMessage(message, item.dispositive.mqttConfig.mqTTtopic);
   }
 }
