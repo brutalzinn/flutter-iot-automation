@@ -1,3 +1,4 @@
+import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
 import 'package:application/app/ui/android/widgets/dropdown_widget_devices_type.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +21,11 @@ class DispositiveEditPage extends GetView<DispositiveController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
             DropDownDeviceType(
-            deviceType:controller.tipoDevice.value, 
-            onChange: (value){
-            if(controller.tipoDevice.value != value){
-             controller.tipoDevice.value = value;
-            }
-              print("Selecionando ${value}");            
-            }),
+              value: controller.tipoDevice.value, 
+              onChange: (value){
+              value = value as DeviceType;
+              controller.defineType(value);
+         }),
             TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Nome',

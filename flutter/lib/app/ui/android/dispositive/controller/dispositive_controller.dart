@@ -1,3 +1,4 @@
+import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/model/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
@@ -21,7 +22,8 @@ class DispositiveController extends GetxController {
   final deviceList = <Dispositive>[].obs;
 
   final roomId = int.parse(Get.parameters['roomId']!);
-  final tipoDevice = Rx<int>(0);
+
+  Rx<int> tipoDevice = 0.obs;
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
@@ -47,6 +49,12 @@ class DispositiveController extends GetxController {
 
 
   //recuperar notas para apresentar na tela inicial
+
+  defineType(DeviceType tipo){
+  tipoDevice.value = tipo.index;
+  print("Selecionado ${tipoDevice.value}");
+  print("Selecionando OnChange ${tipo.index}");
+  }
   @override
   void onReady() async {
     super.onReady();
@@ -62,27 +70,41 @@ class DispositiveController extends GetxController {
     });
   }
 
-  //tratar formulario para inclusao de uma nota
   addNote() {
     formKey.currentState?.reset();
-    nomeController.text = '';
-    descricaoController.text = '';
+    nomeController.text = "";
+    descricaoController.text = "";
+    mqttPortController.text = "1883";
+    mqttHostController.text = "";
+    mqttIdUserController.text = "";
+    mqttUserController.text = "";
+    mqttTopicController.text = "";
+    mqttPasswordController.text = "";
+    tipoDevice.value = 0;
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
 
-  //tratar formulario para edicao de uma nota passando id via arguments
-  editNote(Dispositive note) {
-    nomeController.text = note.nome;
-    descricaoController.text = note.descricao;
+  editNote(Dispositive device) {
+    
+    nomeController.text = device.nome;
+    descricaoController.text = device.descricao;
+    mqttPortController.text = device.mqttConfig.mQTTPORT.toString();
+    mqttHostController.text = device.mqttConfig.mQTTHost;
+    mqttIdUserController.text = device.mqttConfig.mQTTID;
+    mqttUserController.text = device.mqttConfig.mQTTUSER;
+    mqttTopicController.text = device.mqttConfig.mqTTtopic;
+    mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
+    tipoDevice.value = device.tipoId!;
+
     titulo = 'Editar Dispositivo';
-    Get.to(() => DispositiveEditPage(), arguments: {"room":note.roomId, "id":note.id});
+    Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
   }
 
   editMode() {
     if (formKey.currentState!.validate()) {
       loading(true);
-      if (Get.parameters['id'] == null) {
+      if (Get.arguments['id'] == null) {
         saveNote();
       } else {
         updateNote();
@@ -91,6 +113,7 @@ class DispositiveController extends GetxController {
   }
 
   saveNote() async {
+    print("TipoDevice ${tipoDevice.value}");
     final device = Dispositive(
       roomId: roomId,
       tipoId: tipoDevice.value,
@@ -105,6 +128,8 @@ class DispositiveController extends GetxController {
   }
 
   updateNote() async {
+    print("TipoDevice ${tipoDevice.value}");
+
     final device = Dispositive(
       id: Get.arguments['id'] as int,
       roomId: roomId,
@@ -136,20 +161,4 @@ class DispositiveController extends GetxController {
     //voltar para a lista de notas
     Get.back();
   }
-
-  // validar campo titulo
-  validarTitulo(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Preencha o campo Título.';
-    }
-    return null;
-  }
-
-  //validar campo conteudo
-  // validarConteudo(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return 'Preencha o campo Conteúdo.';
-  //   }
-  //   return null;
-  // }
 }

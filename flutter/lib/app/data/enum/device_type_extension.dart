@@ -9,14 +9,9 @@ extension ItemEnumExtension on DeviceType{
      case DeviceType.powerControl:
       return "power";
      case DeviceType.simpleSwitch:
-      return "simpleSwitch";
+      return "simple Switch";
      case DeviceType.simpleToggle:
-      return "simpleToggle";
+      return "simple Toggle";
    }
- }
-
-  int get displayId
- {
-   return index;
  }
 }

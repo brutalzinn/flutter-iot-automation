@@ -4,4 +4,5 @@ enum DeviceType
   simpleToggle,
   powerControl,
   fanControl
+  
 }
