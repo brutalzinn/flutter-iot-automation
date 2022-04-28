@@ -33,7 +33,7 @@ class Dispositive {
         nome: json["nome"],
         descricao: json["descricao"],
         roomId: json["roomId"] ?? -1,
-        tipoId: json["tipoId"] ?? -1,
+        tipoId: json["tipo_id"] ?? 0,
         mqttConfig: MQTTConnection(
         mQTTHost: json["mqtt_host"],
         mQTTPASSWORD: json["mqtt_password"],
@@ -47,7 +47,7 @@ class Dispositive {
         "id": id,
         "nome": nome,
         "descricao": descricao,
-        "tipoId": tipoId,
+        "tipo_id": tipoId,
         "roomId": roomId,
         "mqttConfig": mqttConfig.toJson(),
       };

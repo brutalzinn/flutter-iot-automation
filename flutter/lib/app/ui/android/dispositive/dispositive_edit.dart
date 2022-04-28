@@ -20,12 +20,11 @@ class DispositiveEditPage extends GetView<DispositiveController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-            DropDownDeviceType(
-              value: controller.tipoDevice.value, 
+            Obx(() =>DropDownDeviceType(
+              value:  controller.tipoDevice.value,
               onChange: (value){
-              value = value as DeviceType;
-              controller.defineType(value);
-         }),
+                controller.defineType(value);
+                })),
             TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Nome',

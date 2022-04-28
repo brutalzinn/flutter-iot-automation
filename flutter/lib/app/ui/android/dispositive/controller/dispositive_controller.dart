@@ -21,9 +21,10 @@ class DispositiveController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositive>[].obs;
 
+  final tipoDevice = Rx<DeviceType>(DeviceType.simpleToggle);
+
   final roomId = int.parse(Get.parameters['roomId']!);
 
-  Rx<int> tipoDevice = 0.obs;
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nomeController = TextEditingController();
@@ -51,7 +52,7 @@ class DispositiveController extends GetxController {
   //recuperar notas para apresentar na tela inicial
 
   defineType(DeviceType tipo){
-  tipoDevice.value = tipo.index;
+  tipoDevice.value = tipo;
   print("Selecionado ${tipoDevice.value}");
   print("Selecionando OnChange ${tipo.index}");
   }
@@ -80,7 +81,7 @@ class DispositiveController extends GetxController {
     mqttUserController.text = "";
     mqttTopicController.text = "";
     mqttPasswordController.text = "";
-    tipoDevice.value = 0;
+    tipoDevice.value = DeviceType.simpleSwitch;
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
@@ -95,7 +96,7 @@ class DispositiveController extends GetxController {
     mqttUserController.text = device.mqttConfig.mQTTUSER;
     mqttTopicController.text = device.mqttConfig.mqTTtopic;
     mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
-    tipoDevice.value = device.tipoId!;
+    tipoDevice.value =  DeviceType.values[device.tipoId!];
 
     titulo = 'Editar Dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
@@ -116,7 +117,7 @@ class DispositiveController extends GetxController {
     print("TipoDevice ${tipoDevice.value}");
     final device = Dispositive(
       roomId: roomId,
-      tipoId: tipoDevice.value,
+      tipoId: tipoDevice.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
@@ -133,7 +134,7 @@ class DispositiveController extends GetxController {
     final device = Dispositive(
       id: Get.arguments['id'] as int,
       roomId: roomId,
-      tipoId: tipoDevice.value,
+      tipoId: tipoDevice.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())

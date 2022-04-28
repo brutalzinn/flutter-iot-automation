@@ -1,7 +1,7 @@
 enum DeviceType
 {
-  simpleSwitch,
   simpleToggle,
+  simpleSwitch,
   powerControl,
   fanControl
   

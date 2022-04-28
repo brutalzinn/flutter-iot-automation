@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class DropDownDeviceType extends StatelessWidget 
 {
   final dynamic onChange;
-  final int value;
+  final DeviceType value;
 
-  const DropDownDeviceType({Key? key, required this.onChange, this.value = 0}) : super(key: key);
+  const DropDownDeviceType({Key? key, required this.onChange, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,10 @@ class DropDownDeviceType extends StatelessWidget
         child: Text(classType.displayTitle));
     }).toList(),
     onChanged: (newValue) {
+      assert(newValue != null);
       onChange(newValue);
     },
-    value: DeviceType?.values[value]
+    value: value
 
 );
 }

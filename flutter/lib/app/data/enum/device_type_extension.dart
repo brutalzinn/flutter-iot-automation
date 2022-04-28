@@ -11,7 +11,7 @@ extension ItemEnumExtension on DeviceType{
      case DeviceType.simpleSwitch:
       return "simple Switch";
      case DeviceType.simpleToggle:
-      return "simple Toggle";
+      return "simple Toggle (padrão)";
    }
  }
 }
