@@ -49,11 +49,11 @@ Future<bool> sendMessage(MessagePayload message) async {
   } on NoConnectionException catch (e) {
     // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
-    client.disconnect();
+ //   client.disconnect();
   } on SocketException catch (e) {
     // Raised by the socket layer
     print('EXAMPLE::socket exception - $e');
-    client.disconnect();
+  //  client.disconnect();
   }
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
@@ -61,8 +61,8 @@ Future<bool> sendMessage(MessagePayload message) async {
     /// Use status here rather than state if you also want the broker return code.
     print(
         'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
-    client.disconnect();
-    exit(-1);
+    //client.disconnect();
+   // exit(-1);
   }
 
   return false;
@@ -71,8 +71,10 @@ Future<bool> sendMessage(MessagePayload message) async {
 void _onMessage(List<MqttReceivedMessage> event) {
  final MqttPublishMessage recMess =
  event[0].payload as MqttPublishMessage;
- final String message = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
- onMessage(messagePayloadFromJson(message));
+ final message = messagePayloadFromJson(MqttPublishPayload.bytesToStringAsString(recMess.payload.message));
+  if(message.event == 1){
+    onMessage(message);
+  }
+
 }
-  //method to handle homeassistant message here
 }

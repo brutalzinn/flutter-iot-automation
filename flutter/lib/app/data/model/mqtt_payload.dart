@@ -11,13 +11,13 @@ String messagePayloadListToJson(List<MessagePayload> data) =>
 
 class MessagePayload {
     dynamic message;
+    int event;
     String? lastMessage = DateTime.now().toString();
-    int? event = 0;
     String? sender = "iot-manager";
 
     MessagePayload({
         required this.message,
-        event,
+        required this.event,
         lastMessage,
         sender
     });
@@ -27,15 +27,13 @@ class MessagePayload {
         message: json["message"],
         lastMessage: json["lastMessage"],
         sender: json["sender"],
-        event: json["event"],
-
+        event: json["event"]
     );
 
     Map<String, dynamic> toJson() => {
         "message": message,
         "lastMessage": lastMessage,
         "sender": sender,
-        "event": event,
-
+        "event": event
     };
 }
