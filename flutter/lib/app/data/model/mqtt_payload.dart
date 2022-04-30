@@ -6,21 +6,18 @@ String messagePayloadToJson(MessagePayload data) => json.encode(data.toJson());
 
 String messagePayloadListToJson(List<MessagePayload> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-
-
 class MessagePayload {
-    dynamic message;
-    int event;
-    String? lastMessage = DateTime.now().toString();
-    String? sender = "iot-manager";
+    Map<String, dynamic>? message;
+    int? event;
+    String? lastMessage;
+    String? sender;
 
-    MessagePayload({
-        required this.message,
-        required this.event,
-        lastMessage,
-        sender
-    });
+    MessagePayload({this.message, this.event, this.sender, this.lastMessage}){
+      lastMessage = DateTime.now().toString();
+    }
+
+
+   
 
 
     factory MessagePayload.fromJson(Map<String, dynamic> json) => MessagePayload(

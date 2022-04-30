@@ -1,19 +1,20 @@
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:application/app/data/model/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
+//melhorar isso depois. Por agora vamos estudar testes.
 class MQTTClient 
 {
+  late MqttServerClient client;
+  final Dispositive dispositive;
+  final Function(MessagePayload) onMessage;
 
-final Dispositive dispositive;
-final Function(MessagePayload) onMessage;
-
-
-MQTTClient(this.dispositive, this.onMessage);
+  MQTTClient(this.dispositive, this.onMessage);
 
  MqttClientPayloadBuilder createPayload(MessagePayload mqttPayload){
   final builder = MqttClientPayloadBuilder();
@@ -21,30 +22,28 @@ MQTTClient(this.dispositive, this.onMessage);
   return builder;
  }
 
-Future<bool> sendMessage(MessagePayload message) async {
-  
-  MqttServerClient client = MqttServerClient(dispositive.mqttConfig.mQTTHost, '');
-  client.port = dispositive.mqttConfig.mQTTPORT;
-  client.setProtocolV31();
+Future<bool> connect() async
+{
 
-  // client.onDisconnected = dispositive.mqttConfig.onEvent;
-  // client.onConnected = dispositive.mqttConfig.onEvent;
-  // client.onSubscribed = dispositive.mqttConfig.onEvent;
- 
+  client = MqttServerClient(dispositive.mqttConfig.mQTTHost, '');
+  client.port = dispositive.mqttConfig.mQTTPORT;
+  client.setProtocolV311();
+
   final connMess = MqttConnectMessage()
       .withClientIdentifier(dispositive.mqttConfig.mQTTID)
       .startClean()
       .withWillQos(MqttQos.atMostOnce);
 
-  print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
+
+  print('EXAMPLE::Mosquitto client connecting....');
+
     try {
     await client.connect(dispositive.mqttConfig.mQTTUSER, dispositive.mqttConfig.mQTTPASSWORD);
-    
-    client.publishMessage(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce, createPayload(message).payload!);
 
     client.subscribe(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce);
     client.updates?.listen(_onMessage);
+
     print("Conectado ao broker");
   } on NoConnectionException catch (e) {
     // Raised by the client when connection fails.
@@ -66,15 +65,29 @@ Future<bool> sendMessage(MessagePayload message) async {
   }
 
   return false;
+
+}
+
+Future<bool> sendMessage(MessagePayload message) async {
+  
+  try{
+    client.publishMessage(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce, createPayload(message).payload!);
+    return true;
+  }
+  catch(e){
+    return false;
+  }
+
 }
 
 void _onMessage(List<MqttReceivedMessage> event) {
  final MqttPublishMessage recMess =
  event[0].payload as MqttPublishMessage;
- final message = messagePayloadFromJson(MqttPublishPayload.bytesToStringAsString(recMess.payload.message));
-  if(message.event == 1){
-    onMessage(message);
-  }
+ final message = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+ final payload = messagePayloadFromJson(message);
 
+ if(payload.event == 1){
+   onMessage(payload);
+ }
 }
 }

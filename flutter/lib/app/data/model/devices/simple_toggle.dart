@@ -6,25 +6,34 @@ import 'package:application/app/data/model/item_abstract.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:application/app/data/provider/mqtt_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SimpleToggle extends ItemAbstract 
 {
-  bool dispositiveMessage = false;
-  SimpleToggle({required Dispositive dispositive}) : super(dispositive: dispositive);
-  
+
+  Rx<String>? messagePayload = Rx<String>("");
+
+  late MQTTClient mqttClient;
+
+  SimpleToggle({ required Dispositive dispositive }) : super(dispositive: dispositive){
+    executeMQTT();
+   
+  }
   @override
-  void executeMQTT() {
-    final mqtt = MQTTClient(dispositive, (data) {
+  void executeMQTT(){
+   mqttClient = MQTTClient(dispositive, (data) {
+          messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
+      });
+     mqttClient.connect();
 
-        dispositiveMessage = data.message["status"] as bool;
-        print(data.message["status"]);
-
-    });
-
-    final message = MessagePayload(message: {"lampada":true}, event: 0);
-    mqtt.sendMessage(message);
   }
 
+  void sendMQTTMessage()  {
+    var message = MessagePayload(message: {"status":"on"}, event: 0);
+    mqttClient.sendMessage(message);
+  }
+  
+  
   @override
   Widget getView() {
     return Center(
@@ -33,17 +42,17 @@ class SimpleToggle extends ItemAbstract
             const Text("SIMPLE TOGGLE",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
            ),
-            Text("Status: ${dispositiveMessage ? 'Ativo' : 'Inativo'}",
+            Obx(() =>
+            Text("Status: ${messagePayload ?? "Desconectado"}",
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-
-           ),
+           )),
             TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () {
-              executeMQTT();
+             sendMQTTMessage();
             },
             child: const Text('TextButton'),
           )
