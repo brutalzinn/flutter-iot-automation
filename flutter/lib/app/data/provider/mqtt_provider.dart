@@ -1,8 +1,6 @@
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:application/app/data/model/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -12,7 +10,8 @@ class MQTTClient
 {
 
 final Dispositive dispositive;
-final dynamic onMessage;
+final Function(MessagePayload) onMessage;
+
 
 MQTTClient(this.dispositive, this.onMessage);
 
@@ -72,9 +71,8 @@ Future<bool> sendMessage(MessagePayload message) async {
 void _onMessage(List<MqttReceivedMessage> event) {
  final MqttPublishMessage recMess =
  event[0].payload as MqttPublishMessage;
- final String message =
- MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
- onMessage(message);
+ final String message = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+ onMessage(messagePayloadFromJson(message));
 }
   //method to handle homeassistant message here
 }
