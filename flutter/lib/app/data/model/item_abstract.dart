@@ -11,5 +11,5 @@ abstract class ItemAbstract
 
   Widget getCustomOption();
 
-  void executeMQTT(dispositive);
+  void executeMQTT();
 }

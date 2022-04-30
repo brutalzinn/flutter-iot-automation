@@ -26,7 +26,11 @@ class DispositiveListPage extends GetView<DispositiveController> {
           itemCount: controller.deviceList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(
             title: Text(controller.deviceList[index].nome),
+            onTap: () {
+              controller.onClickDevice(controller.deviceList[index]);
+            },
             trailing: Wrap(children: <Widget>[
+          Text(controller.getDeviceTypeEnumTitle(controller.deviceList[index].tipoId)),
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {

@@ -1,36 +1,52 @@
-// ignore_for_file: avoid_print
 
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import '../model/mqtt_connection.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MQTTClient 
 {
 
-final MQTTConnection config;
+final Dispositive dispositive;
+final dynamic onMessage;
 
-MQTTClient({required this.config});
+MQTTClient(this.dispositive, this.onMessage);
 
-Future<bool> sendMessage(String message, String topic) async {
+ MqttClientPayloadBuilder createPayload(MessagePayload mqttPayload){
+  final builder = MqttClientPayloadBuilder();
+  builder.addString(messagePayloadToJson(mqttPayload));
+  return builder;
+ }
+
+Future<bool> sendMessage(MessagePayload message) async {
   
-  MqttClient client = MqttClient(config.mQTTHost, config.mQTTID );
-  client.port = config.mQTTPORT;
+  MqttServerClient client = MqttServerClient(dispositive.mqttConfig.mQTTHost, '');
+  client.port = dispositive.mqttConfig.mQTTPORT;
+  client.setProtocolV31();
 
-  // client.onDisconnected = config.onEvent;
-  // client.onConnected = config.onEvent;
-  // client.onSubscribed = config.onEvent;
+  // client.onDisconnected = dispositive.mqttConfig.onEvent;
+  // client.onConnected = dispositive.mqttConfig.onEvent;
+  // client.onSubscribed = dispositive.mqttConfig.onEvent;
  
   final connMess = MqttConnectMessage()
-      .withClientIdentifier(config.mQTTID)
-      .withWillTopic(topic) // If you set this you must set a will message
-      .withWillMessage(message)
-      .startClean() // Non persistent session for testing
-      .withWillQos(MqttQos.atLeastOnce);
+      .withClientIdentifier(dispositive.mqttConfig.mQTTID)
+      .startClean()
+      .withWillQos(MqttQos.atMostOnce);
 
   print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
     try {
-    await client.connect();
+    await client.connect(dispositive.mqttConfig.mQTTUSER, dispositive.mqttConfig.mQTTPASSWORD);
+    
+    client.publishMessage(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce, createPayload(message).payload!);
+
+    client.subscribe(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce);
+    client.updates?.listen(_onMessage);
+    print("Conectado ao broker");
   } on NoConnectionException catch (e) {
     // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
@@ -53,6 +69,12 @@ Future<bool> sendMessage(String message, String topic) async {
   return false;
 }
 
-
+void _onMessage(List<MqttReceivedMessage> event) {
+ final MqttPublishMessage recMess =
+ event[0].payload as MqttPublishMessage;
+ final String message =
+ MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+ onMessage(message);
+}
   //method to handle homeassistant message here
 }

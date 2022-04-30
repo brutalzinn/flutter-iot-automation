@@ -1,4 +1,3 @@
-import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
 import 'package:application/app/ui/android/widgets/dropdown_widget_devices_type.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class DispositiveEditPage extends GetView<DispositiveController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
             Obx(() =>DropDownDeviceType(
-              value:  controller.tipoDevice.value,
+              value:  controller.deviceType.value,
               onChange: (value){
                 controller.defineType(value);
                 })),
@@ -29,51 +28,37 @@ class DispositiveEditPage extends GetView<DispositiveController> {
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                 ),
-                controller: controller.nomeController,
-                focusNode: controller.nomeFocusNode,
-                textInputAction: TextInputAction.next,
-          
+                controller: controller.nomeController,          
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                 ),
                 controller: controller.descricaoController,
-                focusNode: controller.descricaoFocusNode,
-                textInputAction: TextInputAction.next,
-          
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT HOST',
                 ),
                 controller: controller.mqttHostController,
-                focusNode: controller.mqttHostFocusNode,
-                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT PORT',
                 ),
                 controller: controller.mqttPortController,
-                focusNode: controller.mqttPortFocusNode,
-                textInputAction: TextInputAction.next,
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT Id',
                 ),
                 controller: controller.mqttIdUserController,
-                focusNode: controller.mqttIdUserFocusNode,
-                textInputAction: TextInputAction.next
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT TOPIC',
                 ),
                 controller: controller.mqttTopicController,
-                focusNode: controller.mqttTopicFocusNode,
-                textInputAction: TextInputAction.next
               ),
 
               TextFormField(
@@ -81,16 +66,12 @@ class DispositiveEditPage extends GetView<DispositiveController> {
                   labelText: 'MQTT USER',
                 ),
                 controller: controller.mqttUserController,
-                focusNode: controller.mqttUserFocusNode,
-                textInputAction: TextInputAction.next
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'MQTT PASSWORD',
                 ),
-                controller: controller.mqttPasswordController,
-                focusNode: controller.mqttPasswordFocusNode,
-                textInputAction: TextInputAction.next
+                controller: controller.mqttPasswordController
               ),
               
               Padding(

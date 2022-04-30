@@ -1,4 +1,5 @@
 import 'package:application/app/data/model/item_abstract.dart';
+import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:application/app/data/provider/mqtt_provider.dart';
 
 class MQTTRepository {
@@ -6,7 +7,7 @@ class MQTTRepository {
 
   MQTTRepository({required this.mqttClient});
 
-  sendMessage(String message, ItemAbstract item) {
-    return mqttClient.sendMessage(message, item.dispositive.mqttConfig.mqTTtopic);
+  sendMessage(MessagePayload message, ItemAbstract item) {
+    return mqttClient.sendMessage(message);
   }
 }
