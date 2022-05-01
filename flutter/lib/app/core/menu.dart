@@ -31,18 +31,19 @@ class MenuListPage extends GetView<HomeController> {
         title: const Text("Gerenciador de IOT - MQTT"),
       ),
       drawer: Obx(() => Drawer(
-        child: Column(
-        children: <Widget> [
+        child: ListView(
+        children: [
           ListTile(
           title: const Text("Home"),
           onTap: () {
               Get.toNamed("/");
           }),
           ListView.builder(
-          scrollDirection: Axis.vertical,
+          // scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: homeController.noteList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(
+            
             title: Text(homeController.noteList[index].nome),
             onTap: () {
                 Get.toNamed("/devices/${homeController.noteList[index].id}");
@@ -81,10 +82,14 @@ class MenuListPage extends GetView<HomeController> {
       ),
       
       )),
-    body:   FloatingActionButton(child: const Icon(Icons.add),
-          onPressed: () {
-          homeController.addNote();
-            },),
+      body: Container(
+        padding: EdgeInsets.fromLTRB(60, 10, 10, 60),
+        alignment: Alignment.bottomRight,
+        child: FloatingActionButton(child: const Icon(Icons.add),
+            onPressed: () {
+            homeController.addNote();
+              },),
+      ),
     );  
   }
 }

@@ -14,7 +14,7 @@ class HomeListPage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(title: const Text('Lista de ambientes')),
       body: Obx(() {
         //para testar melhor o loading, descomente a future delayed
         //no provider pra simular uma pequena demora no retorno da requisicao
@@ -28,9 +28,7 @@ class HomeListPage extends GetView<HomeController> {
           itemBuilder: (BuildContext context, int index) => ListTile(
             title: Text(homeController.noteList[index].nome),
             onLongPress: () {
-                //exibir dispositivos
                 Get.toNamed("/devices/${homeController.noteList[index].id}");
-              //  Get.to(() => DispositiveListPage(), arguments: homeController.noteList[index].id!);
             },
             trailing: Wrap(children: <Widget>[
               IconButton(
@@ -43,7 +41,7 @@ class HomeListPage extends GetView<HomeController> {
                   icon: const Icon(Icons.delete),
                   onPressed: () {
                     Get.defaultDialog(
-                        title: 'Excluir Nota',
+                        title: 'Excluir Ambiente',
                         middleText:
                             'Excluir ambiente ${homeController.noteList[index].nome}? Todos os seus dispositivos serão apagados.',
                         textCancel: 'Voltar',
@@ -60,12 +58,12 @@ class HomeListPage extends GetView<HomeController> {
           ),
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          homeController.addNote();
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.add),
+      //   onPressed: () {
+      //     homeController.addNote();
+      //   },
+      // ),
     );
   }
 }
