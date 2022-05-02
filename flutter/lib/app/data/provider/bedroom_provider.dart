@@ -1,4 +1,4 @@
-import 'package:application/app/data/model/quarto_model.dart';
+import 'package:application/app/data/model/database/quarto_model.dart';
 import 'package:application/app/database/bedroom_service.dart';
 import 'package:get/get.dart';
 

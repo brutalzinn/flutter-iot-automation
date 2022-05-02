@@ -1,6 +1,5 @@
 import 'package:application/app/data/provider/bedroom_provider.dart';
 import 'package:application/app/data/repository/bedroom_repository.dart';
-import 'package:application/app/ui/android/dispositive/dispositive_list.dart';
 import 'package:application/app/ui/android/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

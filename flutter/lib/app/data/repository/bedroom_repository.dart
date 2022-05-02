@@ -1,4 +1,4 @@
-import 'package:application/app/data/model/quarto_model.dart';
+import 'package:application/app/data/model/database/quarto_model.dart';
 import 'package:application/app/data/provider/bedroom_provider.dart';
 
 class BedRoomRepository {

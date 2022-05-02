@@ -1,7 +1,7 @@
 
 
 
-import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/item_abstract.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:application/app/data/provider/mqtt_provider.dart';

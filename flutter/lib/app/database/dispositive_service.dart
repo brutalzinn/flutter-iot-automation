@@ -1,4 +1,4 @@
-import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/database/database_service.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,39 +14,43 @@ class DispositiveService extends GetxService {
     return this;
   }
 
-  // recuperar todas as notas
-  Future<List<Dispositive>> getAllByBedRoom(int bedRoomId) async {
-    final result = await db.rawQuery('SELECT * FROM devices WHERE room_id = ? ORDER BY id',[bedRoomId]);
-    print("tentando obter com id do comodo ${bedRoomId}");
+  // recuperar todos os dispositivos
+  Future<List<Dispositive>> getAllDevicesById(int deviceId) async {
+    final result = await db.rawQuery('SELECT * FROM devices WHERE room_id = ? ORDER BY id',[deviceId]);
+    print("tentando obter com id do comodo ${deviceId}");
+    return result.map((json) => Dispositive.fromJson(json)).toList();
+  }
+  // recuperar dispositivos favoritos
+    Future<List<Dispositive>> getAllFavoriteDevices() async {
+    final result = await db.rawQuery('SELECT * FROM devices WHERE is_favorite = 1 ORDER BY id');
     return result.map((json) => Dispositive.fromJson(json)).toList();
   }
 
-  //criar nova nota
+  //criar novo dispositivo
   Future<Dispositive> save(Dispositive device) async {
     final id = await db.rawInsert(
-        'INSERT INTO devices (room_id, tipo_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [device.roomId, device.tipoId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
+        'INSERT INTO devices (room_id, is_favorite, tipo_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [device.roomId, device.isFavorite, device.tipoId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
     
     print(id);
     return device.copy(id: id);
   }
 
-  //atualizar nota
+  //atualizar dispositivo
   Future<Dispositive> update(Dispositive device) async {
     final id = await db.rawUpdate(
-        'UPDATE devices SET tipo_id = ?, nome = ?, descricao = ?, room_id = ? WHERE id = ?',
-        [device.tipoId, device.nome, device.descricao, device.roomId, device.id]);
+        'UPDATE devices SET is_favorite = ?, tipo_id = ?, nome = ?, descricao = ?, room_id = ? WHERE id = ?',
+        [device.isFavorite, device.tipoId, device.nome, device.descricao, device.roomId, device.id]);
     print(id);
     return device.copy(id: id);
   }
 
-  //excluir nota
+  //excluir device
   Future<int> delete(int noteId) async {
     final id = await db.rawDelete('DELETE FROM devices WHERE id = ?', [noteId]);
     return id;
   }
 
-  //fechar conexao com o banco de dados, funcao nao usada nesse app
   Future close() async {
     db.close();
   }

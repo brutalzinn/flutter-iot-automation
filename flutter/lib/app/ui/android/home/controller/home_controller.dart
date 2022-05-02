@@ -1,4 +1,4 @@
-import 'package:application/app/data/model/quarto_model.dart';
+import 'package:application/app/data/model/database/quarto_model.dart';
 import 'package:application/app/data/repository/bedroom_repository.dart';
 import 'package:application/app/ui/android/home/home_edit.dart';
 import 'package:flutter/material.dart';

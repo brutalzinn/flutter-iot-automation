@@ -1,5 +1,5 @@
 
-import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:flutter/material.dart';
 abstract class ItemAbstract
 {

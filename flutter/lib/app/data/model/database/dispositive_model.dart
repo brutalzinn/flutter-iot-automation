@@ -15,6 +15,7 @@ class Dispositive {
   int? tipoId;
   String descricao;
   int? roomId;
+  int? isFavorite;
   MQTTConnection mqttConfig;
   ItemAbstract? itemAbstract;
 
@@ -22,6 +23,7 @@ class Dispositive {
     this.id,
     this.roomId,
     this.itemAbstract,
+    this.isFavorite,
     required this.tipoId,
     required this.nome,
     required this.descricao,
@@ -33,6 +35,7 @@ class Dispositive {
         nome: json["nome"],
         descricao: json["descricao"],
         roomId: json["roomId"] ?? -1,
+        isFavorite: json["is_favorite"] ?? 0,
         tipoId: json["tipo_id"] ?? 0,
         mqttConfig: MQTTConnection(
         mQTTHost: json["mqtt_host"],
@@ -47,6 +50,7 @@ class Dispositive {
         "id": id,
         "nome": nome,
         "descricao": descricao,
+        "is_favorite": isFavorite,
         "tipo_id": tipoId,
         "roomId": roomId,
         "mqttConfig": mqttConfig.toJson(),
@@ -55,6 +59,7 @@ class Dispositive {
   Dispositive copy({
     int? id,
     String? nome,
+    int? isFavorite,
     int? tipoId,
     String? descricao,
     int? roomId,

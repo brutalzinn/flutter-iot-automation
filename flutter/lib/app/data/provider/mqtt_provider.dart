@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';

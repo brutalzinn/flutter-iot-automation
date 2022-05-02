@@ -3,7 +3,7 @@ import 'package:application/app/data/enum/device_type_extension.dart';
 import 'package:application/app/data/model/devices/power.dart';
 import 'package:application/app/data/model/devices/simple_switch.dart';
 import 'package:application/app/data/model/devices/simple_toggle.dart';
-import 'package:application/app/data/model/dispositive_model.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_click.dart';
@@ -100,9 +100,9 @@ class DispositiveController extends GetxController {
     getAll(roomId);
   }
 
-  getAll(int bedRoomId) {
+  getAll(int deviceId) {
     loading(true);
-    repository.getAll(bedRoomId).then((data) {
+    repository.getAllDevicesById(deviceId).then((data) {
       deviceList.value = data;
       loading(false);
     });
