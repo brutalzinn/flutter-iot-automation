@@ -30,7 +30,7 @@ class DispositiveController extends GetxController {
 
   RxBool isFavorite = false.obs;
 
-  final roomId = int.parse(Get.parameters['roomId']!);
+  final roomId = int.parse(Get.parameters['roomId'] ?? "-1");
 
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -104,12 +104,20 @@ class DispositiveController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    getAll(roomId);
+    roomId != -1 ? getAll(roomId) : getAllFavoriteDevices();
   }
 
   getAll(int deviceId) {
     loading(true);
     repository.getAllDevicesById(deviceId).then((data) {
+      deviceList.value = data;
+      loading(false);
+    });
+  }
+
+  getAllFavoriteDevices() {
+    loading(true);
+    repository.getAllFavoriteDevices().then((data) {
       deviceList.value = data;
       loading(false);
     });

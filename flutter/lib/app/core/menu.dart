@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_string_interpolations, unrelated_type_equality_checks
 import 'package:application/app/data/provider/bedroom_provider.dart';
 import 'package:application/app/data/repository/bedroom_repository.dart';
+import 'package:application/app/ui/android/dispositive/dispositive_list_favorite.dart';
 import 'package:application/app/ui/android/home/controller/home_controller.dart';
 import 'package:application/app/ui/android/home/home_list.dart';
 import 'package:flutter/material.dart';
@@ -80,16 +81,23 @@ class MenuListPage extends GetView<HomeController> {
        
       ],
       ),
-      
+      //separar depois
       )),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(60, 10, 10, 60),
-        alignment: Alignment.bottomRight,
-        child: FloatingActionButton(child: const Icon(Icons.add),
-            onPressed: () {
-            homeController.addNote();
-              },),
-      ),
+
+       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+         children: <Widget> [
+          DispositiveListFavorite(),
+            FloatingActionButton(child: const Icon(Icons.add),
+                onPressed: () {
+                homeController.addNote();
+          })
+
+
+       ],)
+      
+      
+     
     );  
   }
 }

@@ -57,12 +57,12 @@ class HomeListPage extends GetView<HomeController> {
           ),
         );
       }),
-      // floatingActionButton: FloatingActionButton(
-      //   child: const Icon(Icons.add),
-      //   onPressed: () {
-      //     homeController.addNote();
-      //   },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          homeController.addNote();
+        },
+      ),
     );
   }
 }
