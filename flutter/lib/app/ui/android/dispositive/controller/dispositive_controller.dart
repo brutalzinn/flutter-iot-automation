@@ -28,6 +28,8 @@ class DispositiveController extends GetxController {
 
   final deviceType = Rx<DeviceType>(DeviceType.simpleToggle);
 
+  RxBool isFavorite = false.obs;
+
   final roomId = int.parse(Get.parameters['roomId']!);
 
   //variaveis do form
@@ -90,6 +92,11 @@ class DispositiveController extends GetxController {
     Get.to(() => DispositiveClickPage(), arguments: {"id":device.id});
   }
 
+//wrong way but i need to finish this project and implement small unit tests
+//for sql models
+  defineFavorite(bool deviceFavorite){
+    isFavorite.value = deviceFavorite;
+  }
   defineType(DeviceType tipo){
     deviceType.value = tipo;
   }
@@ -119,6 +126,7 @@ class DispositiveController extends GetxController {
     mqttTopicController.text = "";
     mqttPasswordController.text = "";
     deviceType.value = DeviceType.simpleSwitch;
+    isFavorite.value = isFavorite.isFalse;
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
@@ -134,7 +142,7 @@ class DispositiveController extends GetxController {
     mqttTopicController.text = device.mqttConfig.mqTTtopic;
     mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
     deviceType.value =  DeviceType.values[device.tipoId!];
-
+    isFavorite.value = device.isFavorite as bool;
     titulo = 'Editar Dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
   }
@@ -153,6 +161,7 @@ class DispositiveController extends GetxController {
   saveNote() async {
     final device = Dispositive(
       roomId: roomId,
+      isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
@@ -169,6 +178,7 @@ class DispositiveController extends GetxController {
     final device = Dispositive(
       id: Get.arguments['id'] as int,
       roomId: roomId,
+      isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),

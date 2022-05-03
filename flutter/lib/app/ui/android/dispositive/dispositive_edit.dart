@@ -1,5 +1,6 @@
 import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
 import 'package:application/app/ui/android/widgets/dropdown_widget_devices_type.dart';
+import 'package:application/app/ui/android/widgets/favorite_widget_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,12 +19,23 @@ class DispositiveEditPage extends GetView<DispositiveController> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-            Obx(() =>DropDownDeviceType(
-              value:  controller.deviceType.value,
-              onChange: (value){
-                controller.defineType(value);
-                })),
+            children: [
+          Obx(()=>(Column(
+              children: [
+               DropDownDeviceType(
+                value:  controller.deviceType.value,
+                onChange: (value){
+                  controller.defineType(value);
+                  }),
+          
+              FavoriteWidgetSelector(
+                isFavorite: controller.isFavorite.value,
+                onChange: (){
+                  controller.defineFavorite(!controller.isFavorite.value);
+                })
+              ]
+              )),
+          ),
             TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Nome',

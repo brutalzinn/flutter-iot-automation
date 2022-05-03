@@ -1,18 +1,22 @@
-import 'package:application/app/data/enum/device_type.dart';
-import 'package:application/app/data/enum/device_type_extension.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:flutter/material.dart'; 
 class FavoriteWidgetSelector extends StatelessWidget 
 {
+   //TODO: REFACTOR THIS
   final dynamic onChange;
+  final bool isFavorite;
 
-  const FavoriteWidgetSelector({Key? key, required this.onChange, required this.value}) : super(key: key);
+  const FavoriteWidgetSelector({Key? key, required this.onChange, required this.isFavorite}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
         icon: new Icon(Icons.favorite),
-        highlightColor: Colors.pink,
-        onPressed: (){onChange();},
+        // highlightColor: Colors.pink,
+        color: isFavorite ? Colors.pink : Colors.black,
+        onPressed: (){
+          onChange();
+        },
       );
 }
 }
