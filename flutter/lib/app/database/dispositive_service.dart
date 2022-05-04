@@ -17,12 +17,14 @@ class DispositiveService extends GetxService {
   // recuperar todos os dispositivos
   Future<List<Dispositive>> getAllDevicesById(int deviceId) async {
     final result = await db.rawQuery('SELECT * FROM devices WHERE room_id = ? ORDER BY id',[deviceId]);
-    print("tentando obter com id do comodo ${deviceId}");
+    print("tentando obter dispositive com ambiente de id: ${deviceId}");
     return result.map((json) => Dispositive.fromJson(json)).toList();
   }
   // recuperar dispositivos favoritos
     Future<List<Dispositive>> getAllFavoriteDevices() async {
-    final result = await db.rawQuery('SELECT * FROM devices WHERE is_favorite = 1 ORDER BY id');
+    final result = await db.rawQuery('SELECT * FROM devices WHERE is_favorite = ? ORDER BY id', [1]);
+    print("tentando obter dispositivos favoritos");
+
     return result.map((json) => Dispositive.fromJson(json)).toList();
   }
 

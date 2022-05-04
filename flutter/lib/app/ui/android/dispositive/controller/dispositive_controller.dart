@@ -1,9 +1,9 @@
 import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/enum/device_type_extension.dart';
+import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/devices/power.dart';
 import 'package:application/app/data/model/devices/simple_switch.dart';
 import 'package:application/app/data/model/devices/simple_toggle.dart';
-import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_click.dart';
@@ -28,9 +28,9 @@ class DispositiveController extends GetxController {
 
   final deviceType = Rx<DeviceType>(DeviceType.simpleToggle);
 
+  final roomId = int.parse(Get.parameters['roomId']!);
+  
   RxBool isFavorite = false.obs;
-
-  final roomId = int.parse(Get.parameters['roomId'] ?? "-1");
 
   //variaveis do form
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -45,6 +45,16 @@ class DispositiveController extends GetxController {
   TextEditingController mqttIdUserController = TextEditingController();
   TextEditingController mqttTopicController = TextEditingController();
   
+  //---
+  // FocusNode nomeFocusNode = FocusNode();
+  // FocusNode descricaoFocusNode = FocusNode();
+  // FocusNode mqttHostFocusNode = FocusNode();
+  // FocusNode mqttPasswordFocusNode = FocusNode();
+  // FocusNode mqttUserFocusNode = FocusNode();
+  // FocusNode mqttPortFocusNode = FocusNode();
+  // FocusNode mqttIdUserFocusNode = FocusNode();
+  // FocusNode mqttTopicFocusNode = FocusNode();
+
   //recuperar notas para apresentar na tela inicial
  DeviceType tipoIdToDeviceType(int id){
    return DeviceType.values[id];
@@ -59,6 +69,14 @@ class DispositiveController extends GetxController {
     return const Text("Sem implementação.");
   }
 
+  defineType(DeviceType tipo){
+    deviceType.value = tipo;
+  }
+
+  defineFavorite(bool deviceFavorite){
+    isFavorite.value = deviceFavorite;
+  }
+ 
  String getDeviceTypeEnumTitle(int? type){
    return tipoIdToDeviceType(type ?? 0).displayTitle;
  } 
@@ -82,34 +100,15 @@ class DispositiveController extends GetxController {
     Get.to(() => DispositiveClickPage(), arguments: {"id":device.id});
   }
 
-//wrong way but i need to finish this project and implement small unit tests
-//for sql models
-  defineFavorite(bool deviceFavorite){
-    isFavorite.value = deviceFavorite;
-  }
-  defineType(DeviceType tipo){
-    deviceType.value = tipo;
-  }
-
   @override
   void onReady() async {
     super.onReady();
-    print("TESTE: ${roomId}");
-    print(roomId);
     getAll(roomId);
   }
 
-  getAll(int deviceId) {
+  getAll(int bedRoomId) {
     loading(true);
-    repository.getAllDevicesById(deviceId).then((data) {
-      deviceList.value = data;
-      loading(false);
-    });
-  }
-
-  getAllFavoriteDevices() {
-    loading(true);
-    repository.getAllFavoriteDevices().then((data) {
+    repository.getAllDevicesById(bedRoomId).then((data) {
       deviceList.value = data;
       loading(false);
     });
@@ -126,7 +125,8 @@ class DispositiveController extends GetxController {
     mqttTopicController.text = "";
     mqttPasswordController.text = "";
     deviceType.value = DeviceType.simpleSwitch;
-    isFavorite.value = isFavorite.isFalse;
+    isFavorite.value = false;
+
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
@@ -143,6 +143,8 @@ class DispositiveController extends GetxController {
     mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
     deviceType.value =  DeviceType.values[device.tipoId!];
     isFavorite.value = device.isFavorite as bool;
+
+
     titulo = 'Editar Dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
   }

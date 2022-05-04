@@ -48,7 +48,7 @@ class HomeController extends GetxController {
     formKey.currentState?.reset();
     nomeController.text = '';
     descricaoController.text = '';
-    titulo = 'Incluir Nota';
+    titulo = 'Incluir Ambiente';
     Get.to(() => HomeEditPage());
   }
 
@@ -56,7 +56,7 @@ class HomeController extends GetxController {
   editNote(Bedroom note) {
     nomeController.text = note.nome;
     descricaoController.text = note.descricao;
-    titulo = 'Editar Nota';
+    titulo = 'Editar Ambiente';
     Get.to(() => HomeEditPage(), arguments: note.id);
   }
 

@@ -1,19 +1,20 @@
 import 'package:application/app/data/provider/dispositive_provider.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
-import 'package:application/app/ui/android/dispositive/controller/dispositive_controller.dart';
+import 'package:application/app/ui/android/dispositive/controller/dispositive_favorite_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DispositiveListFavorite extends GetView<DispositiveController> {
+class DispositiveListFavorite extends GetView<DispositiveFavoriteController> {
 
   @override
-  final controller = Get.put(DispositiveController(DispositiveRepository(DispositiveProvider())));
+  final controller = Get.put(DispositiveFavoriteController(DispositiveRepository(DispositiveProvider())));
   
   DispositiveListFavorite({Key? key}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Favoritos')),
       body: Obx(() {
         if (controller.loading.value == true) {
           return const Center(

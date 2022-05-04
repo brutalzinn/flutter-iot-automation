@@ -37,7 +37,7 @@ class MenuListPage extends GetView<HomeController> {
           ListTile(
           title: const Text("Home"),
           onTap: () {
-            Get.toNamed("/home");
+            Get.toNamed("/device/favorite");
           }),
           ListView.builder(
           // scrollDirection: Axis.vertical,
@@ -85,16 +85,7 @@ class MenuListPage extends GetView<HomeController> {
       )),
 
        body: SafeArea(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: DispositiveListFavorite()
-              )
-            ),
-            Expanded(
+        child: Expanded(
               child: Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -111,8 +102,6 @@ class MenuListPage extends GetView<HomeController> {
                 )
               )
             )
-          ],
-          ),
           ),
           );
                 

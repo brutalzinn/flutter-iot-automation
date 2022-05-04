@@ -16,11 +16,11 @@ class DispositiveListPage extends GetView<DispositiveController> {
     return Scaffold(
       appBar: AppBar(title: const Text('Lista de dispositivos')),
       body: Obx(() {
-        if (controller.loading.value == true) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        // if (controller.loading.value == true) {
+        //   return const Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        // }
         return ListView.builder(
           itemCount: controller.deviceList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(

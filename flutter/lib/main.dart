@@ -1,3 +1,4 @@
+import 'package:application/app/core/menu.dart';
 import 'package:application/app/database/bedroom_service.dart';
 import 'package:application/app/database/database_service.dart';
 import 'package:application/app/database/dispositive_service.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/home',
+      initialRoute: '/',
+
       getPages: AppPages.pages
     );
    
