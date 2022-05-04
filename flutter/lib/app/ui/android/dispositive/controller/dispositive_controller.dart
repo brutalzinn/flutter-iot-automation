@@ -45,16 +45,6 @@ class DispositiveController extends GetxController {
   TextEditingController mqttIdUserController = TextEditingController();
   TextEditingController mqttTopicController = TextEditingController();
   
-  //---
-  // FocusNode nomeFocusNode = FocusNode();
-  // FocusNode descricaoFocusNode = FocusNode();
-  // FocusNode mqttHostFocusNode = FocusNode();
-  // FocusNode mqttPasswordFocusNode = FocusNode();
-  // FocusNode mqttUserFocusNode = FocusNode();
-  // FocusNode mqttPortFocusNode = FocusNode();
-  // FocusNode mqttIdUserFocusNode = FocusNode();
-  // FocusNode mqttTopicFocusNode = FocusNode();
-
   //recuperar notas para apresentar na tela inicial
  DeviceType tipoIdToDeviceType(int id){
    return DeviceType.values[id];
@@ -104,7 +94,9 @@ class DispositiveController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    roomId != -1 ? getAll(roomId) : getAllFavoriteDevices();
+    print("TESTE: ${roomId}");
+    print(roomId);
+    getAll(roomId);
   }
 
   getAll(int deviceId) {

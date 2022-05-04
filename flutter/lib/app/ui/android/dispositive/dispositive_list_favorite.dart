@@ -28,6 +28,7 @@ class DispositiveListFavorite extends GetView<DispositiveController> {
               controller.onClickDevice(controller.deviceList[index]);
             },
             trailing: Wrap(children: <Widget>[
+              Text("Favorite: ${controller.deviceList[index].isFavorite} "),
               Text(controller.getDeviceTypeEnumTitle(controller.deviceList[index].tipoId)),  
             ]),
           ),

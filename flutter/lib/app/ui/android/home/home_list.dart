@@ -15,8 +15,6 @@ class HomeListPage extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(title: const Text('Lista de ambientes')),
       body: Obx(() {
-        //para testar melhor o loading, descomente a future delayed
-        //no provider pra simular uma pequena demora no retorno da requisicao
         if (homeController.loading.value == true) {
           return const Center(
             child: CircularProgressIndicator(),

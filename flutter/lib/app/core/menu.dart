@@ -37,7 +37,7 @@ class MenuListPage extends GetView<HomeController> {
           ListTile(
           title: const Text("Home"),
           onTap: () {
-              Get.toNamed("/");
+            Get.toNamed("/home");
           }),
           ListView.builder(
           // scrollDirection: Axis.vertical,
@@ -84,20 +84,60 @@ class MenuListPage extends GetView<HomeController> {
       //separar depois
       )),
 
-       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-         children: <Widget> [
-          DispositiveListFavorite(),
-            FloatingActionButton(child: const Icon(Icons.add),
-                onPressed: () {
-                homeController.addNote();
-          })
+       body: SafeArea(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: DispositiveListFavorite()
+              )
+            ),
+            Expanded(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[                  
+                Container(
+                  alignment: Alignment.bottomRight,
+                  padding: EdgeInsets.only(bottom: 10, right: 10),
+                  child: FloatingActionButton(child: const Icon(Icons.add),
+                      onPressed: () {
+                      homeController.addNote();
+                  })
+                )
+                  ]
+                )
+              )
+            )
+          ],
+          ),
+          ),
+          );
+                
+                
+              
+       
+           
+           
+           
 
 
-       ],)
+
+          //  DispositiveListFavorite(),
+          //   Container(
+          //     alignment: Alignment.bottomRight,
+          //     padding: EdgeInsets.only(bottom: 60, right: 10),
+          //     child: FloatingActionButton(child: const Icon(Icons.add),
+          //         onPressed: () {
+          //         homeController.addNote();
+          // }),
+          //   )
+       
       
       
      
-    );  
+     
   }
 }
