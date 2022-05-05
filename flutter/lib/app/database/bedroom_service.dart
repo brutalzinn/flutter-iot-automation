@@ -27,7 +27,6 @@ class BedroomsService extends GetxService {
         'INSERT INTO bedrooms (nome, descricao) VALUES (?,?)',
         [note.nome, note.descricao]);
 
-    print(id);
     return note.copy(id: id);
   }
 
@@ -37,7 +36,6 @@ class BedroomsService extends GetxService {
         'UPDATE bedrooms SET nome = ?, descricao = ? WHERE id = ?',
         [note.nome, note.descricao, note.id]);
 
-    print(id);
     return note.copy(id: id);
   }
 

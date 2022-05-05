@@ -1,3 +1,4 @@
+import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/database/database_service.dart';
 import 'package:get/get.dart';
@@ -31,8 +32,8 @@ class DispositiveService extends GetxService {
   //criar novo dispositivo
   Future<Dispositive> save(Dispositive device) async {
     final id = await db.rawInsert(
-        'INSERT INTO devices (room_id, is_favorite, tipo_id, nome, descricao, mqtt_host, mqtt_port, mqtt_user, mqtt_password, mqtt_id, mqtt_topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [device.roomId, device.isFavorite, device.tipoId, device.nome, device.descricao, device.mqttConfig.mQTTHost, device.mqttConfig.mQTTPORT, device.mqttConfig.mQTTUSER, device.mqttConfig.mQTTPASSWORD, device.mqttConfig.mQTTID, device.mqttConfig.mqTTtopic]);
+        'INSERT INTO devices (room_id, is_favorite, tipo_id, nome, descricao, mqtt_config, custom_data) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [device.roomId, device.isFavorite, device.tipoId, device.nome, device.descricao, device.mqttConfig.mqttToJson(), customDataListToJson(device.customData!)]);
     
     print(id);
     return device.copy(id: id);
@@ -41,8 +42,8 @@ class DispositiveService extends GetxService {
   //atualizar dispositivo
   Future<Dispositive> update(Dispositive device) async {
     final id = await db.rawUpdate(
-        'UPDATE devices SET is_favorite = ?, tipo_id = ?, nome = ?, descricao = ?, room_id = ? WHERE id = ?',
-        [device.isFavorite, device.tipoId, device.nome, device.descricao, device.roomId, device.id]);
+        'UPDATE devices SET is_favorite = ?, tipo_id = ?, nome = ?, descricao = ?, room_id = ?, mqtt_config = ?, custom_data = ? WHERE id = ?',
+        [device.isFavorite, device.tipoId, device.nome, device.descricao, device.roomId, device.mqttConfig.mqttToJson(), customDataListToJson(device.customData!) , device.id]);
     print(id);
     return device.copy(id: id);
   }

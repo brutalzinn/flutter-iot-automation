@@ -1,5 +1,6 @@
 import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/enum/device_type_extension.dart';
+import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/devices/power.dart';
 import 'package:application/app/data/model/devices/simple_switch.dart';
@@ -60,6 +61,16 @@ class DispositiveController extends GetxController {
    return DeviceType.values[id];
  }
 
+// hora de separar as responsabilidades dessa classe. SOLID please.
+  List<CustomData> getDeviceCustomData(){
+    final deviceId = Get.arguments['id'] as int;
+    final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
+    if(device != null) {
+      return device.customData!;
+    }
+    return [];
+  }
+
   Widget showDeviceView(){
     final deviceId = Get.arguments['id'] as int;
     final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
@@ -91,6 +102,7 @@ class DispositiveController extends GetxController {
 
       case DeviceType.powerControl:
         return Power(dispositive: device).getView();
+
       default:
         return const Text("Sem implementação.");
    }
@@ -126,7 +138,6 @@ class DispositiveController extends GetxController {
     mqttPasswordController.text = "";
     deviceType.value = DeviceType.simpleSwitch;
     isFavorite.value = false;
-
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
@@ -143,7 +154,7 @@ class DispositiveController extends GetxController {
     mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
     deviceType.value =  DeviceType.values[device.tipoId!];
     isFavorite.value = device.isFavorite as bool;
-
+    
 
     titulo = 'Editar Dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
@@ -167,6 +178,7 @@ class DispositiveController extends GetxController {
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
+      customData: [],
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
     );
     repository.save(device).then((data) {
@@ -184,6 +196,7 @@ class DispositiveController extends GetxController {
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
+      customData: getDeviceCustomData(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
 
     );

@@ -15,11 +15,7 @@ class MessagePayload {
     MessagePayload({this.message, this.event, this.sender, this.lastMessage}){
       lastMessage = DateTime.now().toString();
     }
-
-
-   
-
-
+    
     factory MessagePayload.fromJson(Map<String, dynamic> json) => MessagePayload(
         message: json["message"],
         lastMessage: json["lastMessage"],

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/item_abstract.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 //mudar nome dessa classe
 List<Dispositive> dispositivoFromJson(String str) =>
     List<Dispositive>.from(json.decode(str).map((x) => Dispositive.fromJson(x)));
+
 
 String dispositivoToJson(List<Dispositive> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -17,6 +19,7 @@ class Dispositive {
   int? roomId;
   bool? isFavorite;
   MQTTConnection mqttConfig;
+  List<CustomData>? customData;
   ItemAbstract? itemAbstract;
 
   Dispositive({
@@ -24,6 +27,7 @@ class Dispositive {
     this.roomId,
     this.itemAbstract,
     this.isFavorite,
+    this.customData,
     required this.tipoId,
     required this.nome,
     required this.descricao,
@@ -37,13 +41,9 @@ class Dispositive {
         roomId: json["roomId"] ?? -1,
         isFavorite: json["is_favorite"] as int == 1 ? true : false,
         tipoId: json["tipo_id"] ?? 0,
-        mqttConfig: MQTTConnection(
-        mQTTHost: json["mqtt_host"],
-        mQTTPASSWORD: json["mqtt_password"],
-        mqTTtopic: json["mqtt_topic"], 
-        mQTTID: json["mqtt_id"], 
-        mQTTPORT: json["mqtt_port"],
-        mQTTUSER: json["mqtt_user"]),
+        mqttConfig:  mqttFromJson(json["mqtt_config"]),
+        customData: customDataFromJson(json["custom_data"]),
+
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,7 +53,8 @@ class Dispositive {
         "is_favorite": isFavorite as int == 1 ? true : false,
         "tipo_id": tipoId,
         "roomId": roomId,
-        "mqttConfig": mqttConfig.toJson(),
+        "mqtt_config": mqttToJson(mqttConfig),
+        "custom_data": customDataListToJson(customData!)
       };
 
   Dispositive copy({
@@ -63,6 +64,7 @@ class Dispositive {
     int? tipoId,
     String? descricao,
     int? roomId,
+    List<CustomData>? customData,
     MQTTConnection? mqttConfig
   }) =>
       Dispositive(
@@ -72,6 +74,7 @@ class Dispositive {
         tipoId: tipoId ?? this.tipoId,
         descricao: descricao ?? this.descricao,
         roomId: roomId ?? this.roomId,
+        customData: customData ?? this.customData,
         mqttConfig: mqttConfig ?? this.mqttConfig,
       );
 }
