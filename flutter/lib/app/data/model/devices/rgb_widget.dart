@@ -10,7 +10,7 @@ class Power extends ItemAbstract
   Power({required Dispositive dispositive}) : super(dispositive: dispositive);
 
   @override
-  void executeMQTT() {
+  void onConnectMQTT() {
     print("Executando mqtt");
   }
 
@@ -20,6 +20,11 @@ class Power extends ItemAbstract
   }
 
   @override
+  void onClose() {
+    // TODO: implement onClose
+  }
+  
+  @override
   Widget getCustomOption() {
         return TextFormField(
           decoration: const InputDecoration(
@@ -28,5 +33,7 @@ class Power extends ItemAbstract
         textInputAction: TextInputAction.next,
       );
   }
+
+
 
 }

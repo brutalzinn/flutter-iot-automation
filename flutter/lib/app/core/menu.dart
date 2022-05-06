@@ -43,7 +43,7 @@ class MenuListPage extends GetView<HomeController> {
             
             title: Text(homeController.noteList[index].nome),
             onTap: () {
-                Get.toNamed("/devices/${homeController.noteList[index].id}");
+                Get.toNamed("/devices/${homeController.noteList[index].id}", parameters: {"room":homeController.noteList[index].nome});
             },
             trailing: Wrap(children: <Widget>[
               IconButton(

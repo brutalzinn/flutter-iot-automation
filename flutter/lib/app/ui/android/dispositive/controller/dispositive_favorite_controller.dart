@@ -1,7 +1,6 @@
 import 'package:application/app/data/enum/device_type.dart';
-import 'package:application/app/data/enum/device_type_extension.dart';
-import 'package:application/app/data/model/devices/power.dart';
-import 'package:application/app/data/model/devices/simple_switch.dart';
+import 'package:application/app/data/enum/extension/device_type_extension.dart';
+import 'package:application/app/data/model/devices/rgb_widget.dart';
 import 'package:application/app/data/model/devices/simple_toggle.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
@@ -47,16 +46,16 @@ class DispositiveFavoriteController extends GetxController {
  } 
 
  Widget onPreviewWidget(Dispositive device){
-    switch(tipoIdToDeviceType(device.tipoId as int)){
+    switch(tipoIdToDeviceType(device.tipoId as int))
+    {
+
      case DeviceType.simpleToggle:
         return SimpleToggle(dispositive: device).getView();
 
-      case DeviceType.simpleSwitch:
-        return SimpleSwitch(dispositive: device).getView();
+      case DeviceType.simpleRgb:
+        return RgbWidget(dispositive: device).getView();
 
-      case DeviceType.powerControl:
-        return Power(dispositive: device).getView();
-      default:
+     default:
         return const Text("Sem implementação.");
    }
   }

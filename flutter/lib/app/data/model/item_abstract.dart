@@ -7,9 +7,12 @@ abstract class ItemAbstract
 
   ItemAbstract({required this.dispositive});
 
+
   Widget getView();
 
   Widget getCustomOption();
 
-  void executeMQTT();
+  void onClose();
+
+  void onConnectMQTT();
 }

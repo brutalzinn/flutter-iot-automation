@@ -1,5 +1,5 @@
 import 'package:application/app/data/enum/device_type.dart';
-import 'package:application/app/data/enum/device_type_extension.dart';
+import 'package:application/app/data/enum/extension/device_type_extension.dart';
 import 'package:flutter/material.dart'; 
 class DropDownDeviceType extends StatelessWidget 
 {

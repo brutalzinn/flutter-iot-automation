@@ -14,13 +14,13 @@ class DispositiveListPage extends GetView<DispositiveController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ambiente ${1234}')),
+      appBar: AppBar(title: Text(controller.getAmbience())),
       body: Obx(() {
-        // if (controller.loading.value == true) {
-        //   return const Center(
-        //     child: CircularProgressIndicator(),
-        //   );
-        // }
+        if (controller.loading.value == true) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         return ListView.builder(
           itemCount: controller.deviceList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(

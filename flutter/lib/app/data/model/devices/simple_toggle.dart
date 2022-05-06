@@ -12,24 +12,41 @@ class SimpleToggle extends ItemAbstract
 {
 
   Rx<String>? messagePayload = Rx<String>("");
+  RxBool toggleButton = false.obs;
 
   late MQTTClient mqttClient;
 
   SimpleToggle({ required Dispositive dispositive }) : super(dispositive: dispositive){
-    executeMQTT();
+    onConnectMQTT();
    
   }
   @override
-  void executeMQTT(){
+  void onClose() {
+      print("Desconectando MQTT..");
+      mqttClient.disconnect();
+  }
+  
+  @override
+  void onConnectMQTT(){
    mqttClient = MQTTClient(dispositive, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
      mqttClient.connect();
 
   }
+  //TODO: colocar em um part of pois são
+  // utilidades especificas do MQTT
+  // regra de negócio entre Aplicativo, HomeAssistant e dispositivos IOT
+  //TODO: renomear classe e nome de métodos. Esses nomes não estão batendo
+  //TODO: Traduzir tudo para inglês e criar um arquivo de testes para o GetX
+
+  String mqttTranslator(bool status){
+     return status ? "on" : "off";
+  }
 
   void sendMQTTMessage()  {
-    var message = MessagePayload(message: {"status":"on"}, event: 0);
+    toggleButton.value = !toggleButton.value;
+    var message = MessagePayload(message: {"status":mqttTranslator(toggleButton.value)}, event: 0);
     mqttClient.sendMessage(message);
   }
   
@@ -39,7 +56,7 @@ class SimpleToggle extends ItemAbstract
     return Center(
       child: Column(
         children: [
-            const Text("SIMPLE TOGGLE",
+            const Text("SIMPLE TOGGLE TEST",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
            ),
             Obx(() =>
@@ -52,9 +69,9 @@ class SimpleToggle extends ItemAbstract
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () {
-             sendMQTTMessage();
+              sendMQTTMessage();
             },
-            child: const Text('TextButton'),
+            child: Obx(() => Text(mqttTranslator(toggleButton.value))),
           )
         ],
       ),
@@ -70,7 +87,8 @@ class SimpleToggle extends ItemAbstract
         textInputAction: TextInputAction.next,
       );
   }
-  
+
+ 
 
  
 

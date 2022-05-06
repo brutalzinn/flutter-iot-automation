@@ -1,9 +1,8 @@
 import 'package:application/app/data/enum/device_type.dart';
-import 'package:application/app/data/enum/device_type_extension.dart';
+import 'package:application/app/data/enum/extension/device_type_extension.dart';
 import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
-import 'package:application/app/data/model/devices/power.dart';
-import 'package:application/app/data/model/devices/simple_switch.dart';
+import 'package:application/app/data/model/devices/rgb_widget.dart';
 import 'package:application/app/data/model/devices/simple_toggle.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
@@ -65,6 +64,7 @@ class DispositiveController extends GetxController {
     final deviceId = Get.arguments['id'] as int;
     final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
     if(device != null) {
+      titulo = device.nome;
       return onPreviewWidget(device);
     }
     return const Text("Sem implementação.");
@@ -78,28 +78,45 @@ class DispositiveController extends GetxController {
     isFavorite.value = deviceFavorite;
   }
  
+  String getAmbience(){
+   return Get.parameters["room"] as String;
+ } 
+
  String getDeviceTypeEnumTitle(int? type){
    return tipoIdToDeviceType(type ?? 0).displayTitle;
  } 
 
+  //iniciando estrutura e logo depois utilizar testes com GetEx
  Widget onPreviewWidget(Dispositive device){
     switch(tipoIdToDeviceType(device.tipoId as int)){
+
      case DeviceType.simpleToggle:
-        return SimpleToggle(dispositive: device).getView();
+        device.itemAbstract = SimpleToggle(dispositive: device);
+        break;
+      case DeviceType.simpleRgb:
+        device.itemAbstract = RgbWidget(dispositive: device);
+        break;
+      }
+       return device.itemAbstract!.getView(); 
 
-      case DeviceType.simpleSwitch:
-        return SimpleSwitch(dispositive: device).getView();
 
-      case DeviceType.powerControl:
-        return Power(dispositive: device).getView();
-
-      default:
-        return const Text("Sem implementação.");
-   }
   }
 
   onClickDevice(Dispositive device){
     Get.to(() => DispositiveClickPage(), arguments: {"id":device.id});
+  }
+
+  void closeView(){
+    final deviceId = Get.arguments['id'] as int;
+    print("route closed" + deviceId.toString());
+
+    final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
+    if(device != null){
+      device.itemAbstract!.onClose();
+    }
+
+     Get.back();
+
   }
 
   @override
@@ -126,7 +143,7 @@ class DispositiveController extends GetxController {
     mqttUserController.text = "";
     mqttTopicController.text = "";
     mqttPasswordController.text = "";
-    deviceType.value = DeviceType.simpleSwitch;
+    deviceType.value = DeviceType.simpleToggle;
     isFavorite.value = false;
     titulo = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});

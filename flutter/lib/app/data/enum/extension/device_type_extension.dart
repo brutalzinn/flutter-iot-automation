@@ -3,10 +3,9 @@ extension DeviceTypeExtension on DeviceType{
  String get displayTitle
  {
    switch(this){
-     case DeviceType.powerControl:
-      return "power";
-     case DeviceType.simpleSwitch:
-      return "simple Switch";
+
+     case DeviceType.simpleRgb:
+      return "simple rgb";
      case DeviceType.simpleToggle:
       return "simple Toggle (padrão)";
    }

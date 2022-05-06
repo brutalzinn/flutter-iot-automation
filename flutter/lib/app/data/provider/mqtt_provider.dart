@@ -77,7 +77,18 @@ Future<bool> sendMessage(MessagePayload message) async {
   catch(e){
     return false;
   }
+}
 
+Future<bool> disconnect() async {
+  try{
+    client.disconnect();
+    return true;
+  }
+  catch(e){
+    print('EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+   
+    return false;
+  }
 }
 
 void _onMessage(List<MqttReceivedMessage> event) {
