@@ -2,7 +2,7 @@ import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/enum/extension/device_type_extension.dart';
 import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
-import 'package:application/app/data/model/devices/rgb_widget.dart';
+import 'package:application/app/data/model/devices/device_rgb/rgb_widget.dart';
 import 'package:application/app/data/model/devices/simple_toggle.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
