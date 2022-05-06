@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 //mudar nome dessa classe
 class DispositiveService extends GetxService {
-  //o banco de dados declarado como late sera inicializado na primeira leitura
+
   late Database db;
 
   Future<DispositiveService> init() async {

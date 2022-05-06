@@ -1,12 +1,8 @@
-// ignore_for_file: unnecessary_string_interpolations, unrelated_type_equality_checks
 import 'package:application/app/data/provider/bedroom_provider.dart';
 import 'package:application/app/data/repository/bedroom_repository.dart';
-import 'package:application/app/ui/android/dispositive/dispositive_list_favorite.dart';
 import 'package:application/app/ui/android/home/controller/home_controller.dart';
-import 'package:application/app/ui/android/home/home_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
  class DrawerItem extends StatelessWidget {
   final String title;
@@ -85,23 +81,21 @@ class MenuListPage extends GetView<HomeController> {
       )),
 
        body: SafeArea(
-        child: Expanded(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[                  
-                Container(
-                  alignment: Alignment.bottomRight,
-                  padding: EdgeInsets.only(bottom: 10, right: 10),
-                  child: FloatingActionButton(child: const Icon(Icons.add),
-                      onPressed: () {
-                      homeController.addNote();
-                  })
-                )
-                  ]
-                )
-              )
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[                  
+          Container(
+            alignment: Alignment.bottomRight,
+            padding: EdgeInsets.only(bottom: 10, right: 10),
+            child: FloatingActionButton(child: const Icon(Icons.add),
+                onPressed: () {
+                homeController.addNote();
+            })
             )
+            ]
+          )
+        )
           ),
           );
                 

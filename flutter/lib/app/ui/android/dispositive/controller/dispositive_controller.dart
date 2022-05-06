@@ -45,16 +45,6 @@ class DispositiveController extends GetxController {
   TextEditingController mqttPortController = TextEditingController();
   TextEditingController mqttIdUserController = TextEditingController();
   TextEditingController mqttTopicController = TextEditingController();
-  
-  //---
-  // FocusNode nomeFocusNode = FocusNode();
-  // FocusNode descricaoFocusNode = FocusNode();
-  // FocusNode mqttHostFocusNode = FocusNode();
-  // FocusNode mqttPasswordFocusNode = FocusNode();
-  // FocusNode mqttUserFocusNode = FocusNode();
-  // FocusNode mqttPortFocusNode = FocusNode();
-  // FocusNode mqttIdUserFocusNode = FocusNode();
-  // FocusNode mqttTopicFocusNode = FocusNode();
 
   //recuperar notas para apresentar na tela inicial
  DeviceType tipoIdToDeviceType(int id){

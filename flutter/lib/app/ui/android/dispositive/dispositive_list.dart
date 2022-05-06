@@ -14,7 +14,7 @@ class DispositiveListPage extends GetView<DispositiveController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de dispositivos')),
+      appBar: AppBar(title: const Text('Ambiente ${1234}')),
       body: Obx(() {
         // if (controller.loading.value == true) {
         //   return const Center(
