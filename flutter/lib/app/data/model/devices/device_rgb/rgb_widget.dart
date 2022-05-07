@@ -1,6 +1,8 @@
 
 
 
+import 'dart:async';
+
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/devices/device_rgb/model/color.dart';
 import 'package:application/app/data/model/item_abstract.dart';
@@ -9,12 +11,12 @@ import 'package:application/app/data/provider/mqtt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'dart:convert';
 class RgbWidget extends ItemAbstract 
 {
 
   Rx<String>? messagePayload = Rx<String>("");
   RxBool toggleButton = false.obs;
+  Timer? _senderTime;
 
   late MQTTClient mqttClient;
 
@@ -40,17 +42,21 @@ class RgbWidget extends ItemAbstract
 
 
   void sendMQTTMessage(RgbColor color)  {
-    var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
-    mqttClient.sendMessage(message);
+    //gamb parecida com o javascript cleatimeout e settimeout
+    if(_senderTime?.isActive ?? false) _senderTime?.cancel();
+    _senderTime= Timer(Duration(seconds: 1),() {
+      var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
+      mqttClient.sendMessage(message);
+    });
+    
   }
-  
   
   @override
   Widget getView() {
     return Center(
       child: Column(
         children: [
-            const Text("SIMPLE RGB ARDUINO TEST",
+            const Text("SIMPLE RGB",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
            ),
             Obx(() =>
@@ -58,8 +64,9 @@ class RgbWidget extends ItemAbstract
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
            )),
           ColorPicker(
-            pickerColor: Colors.blue, //default color
-            onColorChanged: (Color color){ //on color picked
+            pickerColor: Colors.blue, 
+            onColorChanged: (Color color)
+            {
             var payload = RgbColor(blue: color.blue,red: color.red,green: color.green);
             sendMQTTMessage(payload);
             }, 
