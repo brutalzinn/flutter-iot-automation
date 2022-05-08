@@ -28,7 +28,7 @@ class DispositiveController extends GetxController {
 
   final deviceType = Rx<DeviceType>(DeviceType.simpleToggle);
 
-  final roomId = int.parse(Get.parameters['roomId']!);
+  int roomId = Get.parameters['roomId'] != null ? int.parse(Get.parameters['roomId'] as String) : -1;
   
   RxBool isFavorite = false.obs;
 
@@ -122,12 +122,24 @@ class DispositiveController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    getAll(roomId);
+    if(roomId != -1) {
+      getAll(roomId);
+      return;
+    }
+    getAllFavoriteDevices();
   }
 
   getAll(int bedRoomId) {
     loading(true);
     repository.getAllDevicesById(bedRoomId).then((data) {
+      deviceList.value = data;
+      loading(false);
+    });
+  }
+
+  getAllFavoriteDevices() {
+    loading(true);
+    repository.getAllFavoriteDevices().then((data) {
       deviceList.value = data;
       loading(false);
     });

@@ -31,7 +31,7 @@ class MenuListPage extends GetView<HomeController> {
         child: ListView(
         children: [
           ListTile(
-          title: const Text("Home"),
+          title: const Text("Favoritos"),
           onTap: () {
             Get.toNamed("/device/favorite");
           }),
@@ -89,7 +89,7 @@ class MenuListPage extends GetView<HomeController> {
             alignment: Alignment.bottomRight,
             padding: EdgeInsets.only(bottom: 10, right: 10),
             child: FloatingActionButton(child: const Icon(Icons.add),
-                onPressed: () {
+            onPressed: () {
                 homeController.addNote();
             })
             )

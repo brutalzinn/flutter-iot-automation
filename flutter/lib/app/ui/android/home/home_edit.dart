@@ -21,18 +21,18 @@ class HomeEditPage extends GetView<HomeController> {
             children: <Widget>[
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'Cômodo',
+                  labelText: 'Ambiente',
                 ),
                 controller: controller.nomeController,
                 focusNode: controller.titleFocusNode,
                 textInputAction: TextInputAction.next,
-            
+                key: Key("ambienteInput"),
                 onEditingComplete: controller.contentFocusNode.requestFocus,
                 onFieldSubmitted: (String value) {
                   controller.contentFocusNode.requestFocus();
                 },
                 validator: (value) {
-                  return controller.validarTitulo(value, "Preencha o campo Cômodo");
+                  return controller.validarTitulo(value, "Preencha o campo Ambiente");
                 },
               ),
               TextFormField(

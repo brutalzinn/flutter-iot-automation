@@ -67,8 +67,8 @@ class RgbWidget extends ItemAbstract
             pickerColor: Colors.blue, 
             onColorChanged: (Color color)
             {
-            var payload = RgbColor(blue: color.blue,red: color.red,green: color.green);
-            sendMQTTMessage(payload);
+            var payload = RgbColor(blue: color.blue, red: color.red,green: color.green);
+              sendMQTTMessage(payload);
             }, 
           )
         ],
