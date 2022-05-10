@@ -4,27 +4,24 @@
 import 'dart:async';
 
 import 'package:application/app/data/model/database/dispositive_model.dart';
-import 'package:application/app/data/model/devices/device_rgb/model/color.dart';
 import 'package:application/app/data/model/item_abstract.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:application/app/data/provider/mqtt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-class RgbWidget extends ItemAbstract 
+
+class DevicePower extends ItemAbstract 
 {
 
-  Rx<String>? messagePayload = Rx<String>("");
-  RxBool toggleButton = false.obs;
+  RxDouble powerLevel = 0.0.obs;
   Timer? _senderTime;
 
   late MQTTClient mqttClient;
 
-  RgbWidget({ required Dispositive dispositive }) : super(dispositive: dispositive){
+  DevicePower({ required Dispositive dispositive }) : super(dispositive: dispositive){
     onConnectMQTT();
+   
   }
-
-  
   @override
   void onClose() {
       print("Desconectando MQTT..");
@@ -34,43 +31,55 @@ class RgbWidget extends ItemAbstract
   @override
   void onConnectMQTT(){
    mqttClient = MQTTClient(dispositive, (data) {
-          messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
+          print(data.message!["status"]);
+          powerLevel.value = data.message!["status"];
       });
      mqttClient.connect();
 
   }
 
 
-  void sendMQTTMessage(RgbColor color)  {
-    //gamb parecida com o javascript cleatimeout e settimeout
+  void sendMQTTMessage()  {
     if(_senderTime?.isActive ?? false) _senderTime?.cancel();
     _senderTime= Timer(Duration(seconds: 1),() {
-      var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
-      mqttClient.sendMessage(message);
+        var message = MessagePayload(message: {"power":powerLevel.value}, event: 0);
+        mqttClient.sendMessage(message);
     });
-    
+ 
   }
+  
   
   @override
   Widget getView() {
     return Center(
       child: Column(
         children: [
-            const Text("SIMPLE RGB",
+            const Text("DEVICE POWER",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
            ),
-            Obx(() =>
-            Text("Status: ${messagePayload ?? "Desconectado"}",
+
+            Obx(() =>Column(children: [
+            // Text("Status: ${powerLevel != 0 ? "Desconectado"}",
+            // style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            // ),
+            Slider(
+            divisions: 10,
+            min: 0.0,
+            max: 100.0,
+            value: powerLevel.value,
+            onChanged: (value) {
+              powerLevel.value = value;
+              sendMQTTMessage();
+            },
+          ),
+           Text("Potência: ${powerLevel.value.toInt()}",
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-           )),
-          ColorPicker(
-            pickerColor: Colors.blue, 
-            onColorChanged: (Color color)
-            {
-            var payload = RgbColor(blue: color.blue, red: color.red,green: color.green);
-              sendMQTTMessage(payload);
-            }, 
-          )
+          ),
+
+
+
+           ]))
+            
         ],
       ),
     );

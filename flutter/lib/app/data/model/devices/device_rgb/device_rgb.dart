@@ -1,25 +1,30 @@
 
 
 
+import 'dart:async';
+
 import 'package:application/app/data/model/database/dispositive_model.dart';
+import 'package:application/app/data/model/devices/device_rgb/model/color.dart';
 import 'package:application/app/data/model/item_abstract.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:application/app/data/provider/mqtt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-class SimpleToggle extends ItemAbstract 
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+class DeviceRGB extends ItemAbstract 
 {
 
   Rx<String>? messagePayload = Rx<String>("");
   RxBool toggleButton = false.obs;
+  Timer? _senderTime;
 
   late MQTTClient mqttClient;
 
-  SimpleToggle({ required Dispositive dispositive }) : super(dispositive: dispositive){
+  DeviceRGB({ required Dispositive dispositive }) : super(dispositive: dispositive){
     onConnectMQTT();
-   
   }
+
+  
   @override
   void onClose() {
       print("Desconectando MQTT..");
@@ -34,44 +39,37 @@ class SimpleToggle extends ItemAbstract
      mqttClient.connect();
 
   }
-  //TODO: colocar em um part of pois são
-  // utilidades especificas do MQTT
-  // regra de negócio entre Aplicativo, HomeAssistant e dispositivos IOT
-  //TODO: renomear classe e nome de métodos. Esses nomes não estão batendo
-  //TODO: Traduzir tudo para inglês e criar um arquivo de testes para o GetX
 
-  String mqttTranslator(bool status){
-     return status ? "on" : "off";
-  }
 
-  void sendMQTTMessage()  {
-    toggleButton.value = !toggleButton.value;
-    var message = MessagePayload(message: {"status":mqttTranslator(toggleButton.value)}, event: 0);
-    mqttClient.sendMessage(message);
+  void sendMQTTMessage(RgbColor color)  {
+    //gamb parecida com o javascript cleatimeout e settimeout
+    if(_senderTime?.isActive ?? false) _senderTime?.cancel();
+    _senderTime= Timer(Duration(seconds: 1),() {
+      var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
+      mqttClient.sendMessage(message);
+    });
+    
   }
-  
   
   @override
   Widget getView() {
     return Center(
       child: Column(
         children: [
-            const Text("SIMPLE TOGGLE TEST",
+            const Text("SIMPLE RGB",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
            ),
             Obx(() =>
             Text("Status: ${messagePayload ?? "Desconectado"}",
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
            )),
-            TextButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-            ),
-            onPressed: () {
-              sendMQTTMessage();
-            },
-            child: Obx(() => Text(mqttTranslator(toggleButton.value))),
+          ColorPicker(
+            pickerColor: Colors.blue, 
+            onColorChanged: (Color color)
+            {
+            var payload = RgbColor(blue: color.blue, red: color.red,green: color.green);
+              sendMQTTMessage(payload);
+            }, 
           )
         ],
       ),

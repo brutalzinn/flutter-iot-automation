@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:application/app/data/enum/payload_event.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/model/mqtt_payload.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -41,7 +42,7 @@ Future<bool> connect() async
     try {
     await client.connect(dispositive.mqttConfig.mQTTUSER, dispositive.mqttConfig.mQTTPASSWORD);
 
-    client.subscribe(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce);
+    client.subscribe(dispositive.mqttConfig.mqTTInputTopic, MqttQos.exactlyOnce);
     client.updates?.listen(_onMessage);
 
     print("Conectado ao broker");
@@ -71,7 +72,7 @@ Future<bool> connect() async
 Future<bool> sendMessage(MessagePayload message) async {
   
   try{
-    client.publishMessage(dispositive.mqttConfig.mqTTtopic, MqttQos.exactlyOnce, createPayload(message).payload!);
+    client.publishMessage(dispositive.mqttConfig.mqTTOutTopic, MqttQos.exactlyOnce, createPayload(message).payload!);
     return true;
   }
   catch(e){
@@ -97,7 +98,7 @@ void _onMessage(List<MqttReceivedMessage> event) {
  final message = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
  final payload = messagePayloadFromJson(message);
 
- if(payload.event == 1){
+ if(payload.event == MessagePayloadEventEnum.response.index){
    onMessage(payload);
  }
 }

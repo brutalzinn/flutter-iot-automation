@@ -1,10 +1,12 @@
 import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/enum/extension/device_type_extension.dart';
-import 'package:application/app/data/model/devices/device_rgb/rgb_widget.dart';
-import 'package:application/app/data/model/devices/simple_toggle.dart';
+import 'package:application/app/data/model/devices/device_power/device_power.dart';
+import 'package:application/app/data/model/devices/device_rgb/device_rgb.dart';
+import 'package:application/app/data/model/devices/device_toggle/device_toggle.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_click.dart';
+import 'package:application/app/ui/android/dispositive/utils/device_widget_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,14 +25,11 @@ class DispositiveFavoriteController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositive>[].obs;
 
-  final deviceType = Rx<DeviceType>(DeviceType.simpleToggle);
+  final deviceType = Rx<DeviceType>(DeviceType.deviceToggle);
 
   RxBool isFavorite = false.obs;
   
   //recuperar notas para apresentar na tela inicial
- DeviceType tipoIdToDeviceType(int id){
-   return DeviceType.values[id];
- }
 
   Widget showDeviceView(){
     final deviceId = Get.arguments['id'] as int;
@@ -44,22 +43,7 @@ class DispositiveFavoriteController extends GetxController {
  String getDeviceTypeEnumTitle(int? type){
    return tipoIdToDeviceType(type ?? 0).displayTitle;
  } 
-
- Widget onPreviewWidget(Dispositive device){
-    switch(tipoIdToDeviceType(device.tipoId as int))
-    {
-
-     case DeviceType.simpleToggle:
-        return SimpleToggle(dispositive: device).getView();
-
-      case DeviceType.simpleRgb:
-        return RgbWidget(dispositive: device).getView();
-
-     default:
-        return const Text("Sem implementação.");
-   }
-  }
-
+ 
   onClickDevice(Dispositive device){
     Get.to(() => DispositiveClickPage(), arguments: {"id":device.id});
   }

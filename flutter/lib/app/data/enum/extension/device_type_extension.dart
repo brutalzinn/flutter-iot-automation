@@ -4,10 +4,12 @@ extension DeviceTypeExtension on DeviceType{
  {
    switch(this){
 
-     case DeviceType.simpleRgb:
-      return "simple rgb";
-     case DeviceType.simpleToggle:
-      return "simple Toggle (padrão)";
+     case DeviceType.deviceRGB:
+      return "Device RGB";
+     case DeviceType.deviceToggle:
+      return "Device Toggle";
+     case DeviceType.devicePower:
+      return "Device Power";
    }
  }
 

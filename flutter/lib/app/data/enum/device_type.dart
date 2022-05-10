@@ -1,6 +1,7 @@
 enum DeviceType
 {
-  simpleToggle,
-  simpleRgb
-  
+  deviceToggle,
+  deviceRGB,
+  devicePower
+
 }

@@ -2,12 +2,11 @@ import 'package:application/app/data/enum/device_type.dart';
 import 'package:application/app/data/enum/extension/device_type_extension.dart';
 import 'package:application/app/data/model/custom_data.dart';
 import 'package:application/app/data/model/database/dispositive_model.dart';
-import 'package:application/app/data/model/devices/device_rgb/rgb_widget.dart';
-import 'package:application/app/data/model/devices/simple_toggle.dart';
 import 'package:application/app/data/model/mqtt_connection.dart';
 import 'package:application/app/data/repository/dispositive_repository.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_click.dart';
 import 'package:application/app/ui/android/dispositive/dispositive_edit.dart';
+import 'package:application/app/ui/android/dispositive/utils/device_widget_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +17,7 @@ class DispositiveController extends GetxController {
   DispositiveController(this.repository);
 
   //variavel do titulo
-  String titulo = '';
+  RxString titulo = "".obs;
 
   //variavel que controla o loading
   RxBool loading = false.obs;
@@ -26,7 +25,7 @@ class DispositiveController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositive>[].obs;
 
-  final deviceType = Rx<DeviceType>(DeviceType.simpleToggle);
+  final deviceType = Rx<DeviceType>(DeviceType.deviceToggle);
 
   int roomId = Get.parameters['roomId'] != null ? int.parse(Get.parameters['roomId'] as String) : -1;
   
@@ -43,14 +42,9 @@ class DispositiveController extends GetxController {
   TextEditingController mqttUserController = TextEditingController();
   TextEditingController mqttPortController = TextEditingController();
   TextEditingController mqttIdUserController = TextEditingController();
-  TextEditingController mqttTopicController = TextEditingController();
+  TextEditingController mqttOutTopicController = TextEditingController();
+  TextEditingController mqttInputTopicController = TextEditingController();
 
-  //recuperar notas para apresentar na tela inicial
- DeviceType tipoIdToDeviceType(int id){
-   return DeviceType.values[id];
- }
-
-// hora de separar as responsabilidades dessa classe. SOLID please.
   List<CustomData> getDeviceCustomData(){
     final deviceId = Get.arguments['id'] as int;
     final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
@@ -61,10 +55,11 @@ class DispositiveController extends GetxController {
   }
 
   Widget showDeviceView(){
+   
     final deviceId = Get.arguments['id'] as int;
     final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
     if(device != null) {
-      titulo = device.nome;
+      titulo.value = device.nome;
       return onPreviewWidget(device);
     }
     return const Text("Sem implementação.");
@@ -86,37 +81,17 @@ class DispositiveController extends GetxController {
    return tipoIdToDeviceType(type ?? 0).displayTitle;
  } 
 
-  //iniciando estrutura e logo depois utilizar testes com GetEx
- Widget onPreviewWidget(Dispositive device){
-    switch(tipoIdToDeviceType(device.tipoId as int)){
-
-     case DeviceType.simpleToggle:
-        device.itemAbstract = SimpleToggle(dispositive: device);
-        break;
-      case DeviceType.simpleRgb:
-        device.itemAbstract = RgbWidget(dispositive: device);
-        break;
-      }
-       return device.itemAbstract!.getView(); 
-
-
-  }
-
   onClickDevice(Dispositive device){
     Get.to(() => DispositiveClickPage(), arguments: {"id":device.id});
   }
 
   void closeView(){
     final deviceId = Get.arguments['id'] as int;
-    print("route closed" + deviceId.toString());
-
     final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
     if(device != null){
-      device.itemAbstract!.onClose();
+      device.itemAbstract?.onClose();
     }
-
      Get.back();
-
   }
 
   @override
@@ -153,11 +128,12 @@ class DispositiveController extends GetxController {
     mqttHostController.text = "";
     mqttIdUserController.text = "";
     mqttUserController.text = "";
-    mqttTopicController.text = "";
+    mqttOutTopicController.text = "";
+    mqttInputTopicController.text = "";
     mqttPasswordController.text = "";
-    deviceType.value = DeviceType.simpleToggle;
+    deviceType.value = DeviceType.deviceToggle;
     isFavorite.value = false;
-    titulo = 'Adicionar dispositivo';
+    titulo.value = 'Adicionar dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":roomId});
   }
 
@@ -169,13 +145,14 @@ class DispositiveController extends GetxController {
     mqttHostController.text = device.mqttConfig.mQTTHost;
     mqttIdUserController.text = device.mqttConfig.mQTTID;
     mqttUserController.text = device.mqttConfig.mQTTUSER;
-    mqttTopicController.text = device.mqttConfig.mqTTtopic;
+    mqttOutTopicController.text = device.mqttConfig.mqTTOutTopic;
+    mqttInputTopicController.text = device.mqttConfig.mqTTInputTopic;
     mqttPasswordController.text = device.mqttConfig.mQTTPASSWORD;
     deviceType.value =  DeviceType.values[device.tipoId!];
     isFavorite.value = device.isFavorite as bool;
     
 
-    titulo = 'Editar Dispositivo';
+    titulo.value = 'Editar Dispositivo';
     Get.to(() => DispositiveEditPage(), arguments: {"room":device.roomId, "id":device.id});
   }
 
@@ -198,7 +175,15 @@ class DispositiveController extends GetxController {
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       customData: [],
-      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
+      mqttConfig: MQTTConnection(
+        mQTTHost: mqttHostController.text.trim(), 
+        mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, 
+        mQTTUSER: mqttUserController.text.trim(), 
+        mQTTID: mqttIdUserController.text.trim(), 
+        mQTTPASSWORD: mqttPasswordController.text.trim(), 
+        mqTTOutTopic: mqttOutTopicController.text.trim(),
+        mqTTInputTopic: mqttInputTopicController.text.trim()
+        )
     );
     repository.save(device).then((data) {
       loading(false);
@@ -216,7 +201,14 @@ class DispositiveController extends GetxController {
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       customData: getDeviceCustomData(),
-      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(), mQTTPORT: int.parse(mqttPortController.text.trim()), mQTTUSER: mqttUserController.text.trim(), mQTTID: mqttIdUserController.text.trim(), mQTTPASSWORD: mqttPasswordController.text.trim(), mqTTtopic: mqttTopicController.text.trim())
+      mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(),
+       mQTTPORT: int.parse(mqttPortController.text.trim()),
+        mQTTUSER: mqttUserController.text.trim(), 
+        mQTTID: mqttIdUserController.text.trim(), 
+        mQTTPASSWORD: mqttPasswordController.text.trim(), 
+        mqTTOutTopic: mqttOutTopicController.text.trim(),
+        mqTTInputTopic: mqttInputTopicController.text.trim()
+        )
 
     );
     repository.update(device).then((data) {

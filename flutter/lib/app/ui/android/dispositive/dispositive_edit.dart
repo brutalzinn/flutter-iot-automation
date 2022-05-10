@@ -13,7 +13,7 @@ class DispositiveEditPage extends GetView<DispositiveController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(controller.titulo)),
+      appBar: AppBar(title: Text(controller.titulo.value)),
       body: Form(
         key: controller.formKey,
         child: SingleChildScrollView(
@@ -68,9 +68,16 @@ class DispositiveEditPage extends GetView<DispositiveController> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: 'MQTT TOPIC',
+                  labelText: 'MQTT OUT TOPIC',
                 ),
-                controller: controller.mqttTopicController,
+                controller: controller.mqttOutTopicController,
+              ),
+              
+               TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'MQTT INPUT TOPIC',
+                ),
+                controller: controller.mqttInputTopicController,
               ),
 
               TextFormField(

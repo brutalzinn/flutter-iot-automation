@@ -11,7 +11,7 @@ class DispositiveClickPage extends GetView<DispositiveController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(controller.titulo), leading: BackButton(onPressed: () => controller.closeView())),
+      appBar: AppBar(title: Obx(()=>Text(controller.titulo.value)), leading: BackButton(onPressed: () => controller.closeView())),
       body: Form(
         key: controller.formKey,
         child: SingleChildScrollView(
