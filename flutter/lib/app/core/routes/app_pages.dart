@@ -1,6 +1,8 @@
 import 'package:application/app/core/menu.dart';
-import 'package:application/app/ui/dispositive/dispositivo_edit.dart';
-import 'package:application/app/ui/dispositive/dispositivo_list.dart';
+import 'package:application/app/ui/dispositivo/dispositivo_edit.dart';
+import 'package:application/app/ui/dispositivo/dispositivo_list.dart';
+import 'package:application/app/ui/dispositivo/dispositivo_list_favorite.dart';
+
 
 import 'package:get/get.dart';
 part './app_routes.dart';
