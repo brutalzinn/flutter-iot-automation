@@ -1,6 +1,6 @@
-import 'package:application/app/data/provider/bedroom_provider.dart';
-import 'package:application/app/data/repository/bedroom_repository.dart';
-import 'package:application/app/ui/android/home/controller/home_controller.dart';
+import 'package:application/app/core/infra/provider/ambiente_provider.dart';
+import 'package:application/app/core/infra/repository/ambiente_repository.dart';
+import 'package:application/app/ui/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 
 class MenuListPage extends GetView<HomeController> {
 
-  final homeController = Get.put(HomeController(BedRoomRepository(BedRoomProvider())));
+  final homeController = Get.put(HomeController(AmbienteRepository(AmbienteProvider())));
  
   MenuListPage({Key? key}) : super(key: key);
 

@@ -1,0 +1,5 @@
+{
+    "dart.showInspectorNotificationsForWidgetErrors": false,
+    "zenMode.silentNotifications": false,
+    "dart.notifyAnalyzerErrors": false
+}
