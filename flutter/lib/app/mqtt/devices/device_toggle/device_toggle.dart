@@ -1,5 +1,7 @@
 
 import 'package:application/app/core/infra/provider/mqtt_provider.dart';
+import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
+import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/item_abstract.dart';
 import 'package:application/app/mqtt/mqtt_payload.dart';
@@ -14,35 +16,38 @@ class DeviceToggle extends ItemAbstract
 
   late MQTTClient mqttClient;
 
-  DeviceToggle({ required Dispositivo dispositive }) : super(dispositive: dispositive){
+  DeviceToggle({ Dispositivo? dispositive}) : super(dispositive: dispositive){
     onConnectMQTT();
-   
   }
+  
   @override
   void onClose() {
+      if(dispositive == null){
+        return;
+      }
       print("Desconectando MQTT..");
       mqttClient.disconnect();
   }
   
   @override
   void onConnectMQTT(){
-   mqttClient = MQTTClient(dispositive, (data) {
+    if(dispositive == null){
+      return;
+    }
+   mqttClient = MQTTClient(dispositive!, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
      mqttClient.connect();
-
   }
-  //TODO: colocar em um part of pois são
-  // utilidades especificas do MQTT
-  // regra de negócio entre Aplicativo, HomeAssistant e dispositivos IOT
-  //TODO: renomear classe e nome de métodos. Esses nomes não estão batendo
-  //TODO: Traduzir tudo para inglês e criar um arquivo de testes para o GetX
 
   String mqttTranslator(bool status){
      return status ? "on" : "off";
   }
 
   void sendMQTTMessage()  {
+    if(dispositive == null){
+      return;
+    }
     toggleButton.value = !toggleButton.value;
     var message = MessagePayload(message: {"status":mqttTranslator(toggleButton.value)}, event: 0);
     mqttClient.sendMessage(message);
@@ -85,6 +90,18 @@ class DeviceToggle extends ItemAbstract
         textInputAction: TextInputAction.next,
       );
   }
+
+  @override
+  void loadCustomData(List<CustomData>? customData) {
+    // TODO: implement loadCustomData
+  }
+
+  @override
+  List<CustomData> saveCustomData() {
+    // TODO: implement saveCustomData
+    throw UnimplementedError();
+  }
+  
 
  
 

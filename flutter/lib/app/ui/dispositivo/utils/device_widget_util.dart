@@ -1,4 +1,5 @@
 
+import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
 import 'package:application/app/enum/device_type.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/devices/device_power/device_power.dart';
@@ -26,5 +27,24 @@ Widget onPreviewWidget(Dispositivo device){
      default:
         return const Text("Sem implementação.");
    }
-   
-  }
+}
+
+Widget onPreviewWidgetCustomData(Dispositivo? device){
+  
+      if(device == null){
+        return  Text("Sem implementação.");
+      }
+      
+      switch(tipoIdToDeviceType(device.tipoId as int))
+      {
+        case DeviceType.deviceToggle:
+          return DeviceToggle().getCustomOption();
+
+        case DeviceType.deviceRGB:
+          return DeviceRGB().getCustomOption();
+        //editando custom data aqui
+        case DeviceType.devicePower:
+          return DevicePower().getCustomOption();
+      }
+    
+}

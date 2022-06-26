@@ -5,6 +5,8 @@ import 'package:application/app/core/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+//essa gambiarra de aguardar os serviços iniciarem na ordem é esquisita.
+//o problema são as "relações" que criamos nos serviços do SQL LITE
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync(() => DatabaseService().init());

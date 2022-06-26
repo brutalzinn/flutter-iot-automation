@@ -4,35 +4,48 @@ import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:get/get.dart';
 
 class DispositivoProvider {
-  final DispositivoServices = Get.find<DispositivoService>();
+  final dispositivoService = Get.find<DispositivoService>();
+
+  Future<Dispositivo> get(int dispositivoId) async {
+    // await Future.delayed(Duration(seconds: 2));
+    return await dispositivoService.get(dispositivoId);
+  }
 
   Future<List<Dispositivo>> getAllDevicesById(int bedRoomId) async {
     // await Future.delayed(Duration(seconds: 2));
-    return await DispositivoServices.getAllDevicesById(bedRoomId);
+    return await dispositivoService.getAllDevicesById(bedRoomId);
   }
 
   Future<List<Dispositivo>> getAllFavoriteDevices() async {
     // await Future.delayed(Duration(seconds: 2));
-    return await DispositivoServices.getAllFavoriteDevices();
+    return await dispositivoService.getAllFavoriteDevices();
   }
   // Future<List<Dispositivo>> getAll() async {
   //   //descomente a linha abaixo para simular um tempo maior de resposta
   //   // await Future.delayed(Duration(seconds: 2));
-  //   return await DispositivoServices.getAllByBedRoom(bedRoomId);
+  //   return await dispositivoService.getAllByBedRoom(bedRoomId);
   // }
 
   Future<Dispositivo> save(Dispositivo device) async {
     //await Future.delayed(const Duration(seconds: 2));
-    return await DispositivoServices.save(device);
+    return await dispositivoService.save(device);
   }
 
   Future<Dispositivo> update(Dispositivo device) async {
     //await Future.delayed(const Duration(seconds: 2));
-    return await DispositivoServices.update(device);
+    return await dispositivoService.update(device);
+  }
+
+  Future<bool> executeQuery(String sql, List<Object>? args) async{
+     return await dispositivoService.executeQuery(sql, args);
+  }
+
+  Future<List<Dispositivo>> executeQueryList(String sql, List<Object>? args) async {
+    return await dispositivoService.executeQueryList(sql, args);
   }
 
   Future<int> delete(int noteId) async {
     //await Future.delayed(const Duration(seconds: 2));
-    return await DispositivoServices.delete(noteId);
+    return await dispositivoService.delete(noteId);
   }
 }

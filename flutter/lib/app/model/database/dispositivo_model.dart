@@ -14,26 +14,29 @@ String dispositivoToJson(List<Dispositivo> data) =>
 class Dispositivo {
 
   int? id;
-  String nome;
+  String? nome;
   int? tipoId;
-  String descricao;
+  String? descricao;
   int? roomId;
   bool? isFavorite;
-  MQTTConnection mqttConfig;
+  MQTTConnection? mqttConfig;
   List<CustomData>? customData;
   ItemAbstract? itemAbstract;
 
-  Dispositivo({
-    this.id,
+  Dispositivo( 
+  {   
+  this.id,
     this.roomId,
     this.itemAbstract,
     this.isFavorite,
     this.customData,
-    required this.tipoId,
-    required this.nome,
-    required this.descricao,
-    required this.mqttConfig
-  });
+    this.tipoId,
+    this.nome,
+    this.descricao,
+    this.mqttConfig
+    }
+    
+  );
 
   factory Dispositivo.fromJson(Map<String, dynamic> json) => Dispositivo(
         id: json["id"],

@@ -3,7 +3,7 @@ import 'dart:convert';
 
   MQTTConnection mqttFromJson(String str) => MQTTConnection.fromJson(json.decode(str));
 
-  String mqttToJson(MQTTConnection data) => json.encode(data.toJson());
+  String mqttToJson(MQTTConnection? data) => json.encode(data?.toJson());
 
 class MQTTConnection
 {

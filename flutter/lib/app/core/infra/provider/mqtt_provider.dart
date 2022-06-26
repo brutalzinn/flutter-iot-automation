@@ -1,6 +1,4 @@
-
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:application/app/enum/payload_event.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
@@ -26,12 +24,12 @@ class MQTTClient
 Future<bool> connect() async
 {
 
-  client = MqttServerClient(dispositive.mqttConfig.mQTTHost, '');
-  client.port = dispositive.mqttConfig.mQTTPORT;
+  client = MqttServerClient(dispositive.mqttConfig?.mQTTHost ?? "", '');
+  client.port = dispositive.mqttConfig?.mQTTPORT;
   client.setProtocolV311();
 
   final connMess = MqttConnectMessage()
-      .withClientIdentifier(dispositive.mqttConfig.mQTTID)
+      .withClientIdentifier(dispositive.mqttConfig?.mQTTID  ?? "")
       .startClean()
       .withWillQos(MqttQos.atMostOnce);
 
@@ -40,9 +38,9 @@ Future<bool> connect() async
   print('EXAMPLE::Mosquitto client connecting....');
 
     try {
-    await client.connect(dispositive.mqttConfig.mQTTUSER, dispositive.mqttConfig.mQTTPASSWORD);
+    await client.connect(dispositive.mqttConfig?.mQTTUSER, dispositive.mqttConfig?.mQTTPASSWORD);
 
-    client.subscribe(dispositive.mqttConfig.mqTTInputTopic, MqttQos.exactlyOnce);
+    client.subscribe(dispositive.mqttConfig?.mqTTInputTopic ?? "", MqttQos.exactlyOnce);
     client.updates?.listen(_onMessage);
 
     print("Conectado ao broker");
@@ -72,7 +70,7 @@ Future<bool> connect() async
 Future<bool> sendMessage(MessagePayload message) async {
   
   try{
-    client.publishMessage(dispositive.mqttConfig.mqTTOutTopic, MqttQos.exactlyOnce, createPayload(message).payload!);
+    client.publishMessage(dispositive.mqttConfig?.mqTTOutTopic ?? "", MqttQos.exactlyOnce, createPayload(message).payload!);
     return true;
   }
   catch(e){

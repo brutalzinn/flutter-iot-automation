@@ -24,7 +24,7 @@ class DispositivoListPage extends GetView<DispositivoController> {
         return ListView.builder(
           itemCount: controller.deviceList.length,
           itemBuilder: (BuildContext context, int index) => ListTile(
-            title: Text(controller.deviceList[index].nome),
+            title: Text(controller.deviceList[index].nome ?? ""),
             onTap: () {
               controller.onClickDevice(controller.deviceList[index]);
             },

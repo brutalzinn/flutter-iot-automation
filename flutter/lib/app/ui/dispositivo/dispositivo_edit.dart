@@ -1,4 +1,6 @@
+import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/ui/dispositivo/controller/dispositivo_controller.dart';
+import 'package:application/app/ui/dispositivo/utils/device_widget_util.dart';
 import 'package:application/app/ui/widgets/dropdown_widget_devices_type.dart';
 import 'package:application/app/ui/widgets/favorite_widget_selector.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +29,12 @@ class DispositivoEditPage extends GetView<DispositivoController> {
                 onChange: (value){
                   controller.defineType(value);
                   }),
-          
               FavoriteWidgetSelector(
                 isFavorite: controller.isFavorite.value,
                 onChange: (){
                   controller.defineFavorite(!controller.isFavorite.value);
-                })
+                }),
+                onPreviewWidgetCustomData(controller.dispositivoAtual.value),
               ]
               )),
           ),

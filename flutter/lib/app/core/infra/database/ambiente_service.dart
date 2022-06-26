@@ -39,7 +39,7 @@ class AmbienteService extends GetxService {
 
   Future<int> delete(int noteId) async {
 
-    await db.rawDelete('DELETE FROM devices WHERE room_id = ?', [noteId]);
+    await db.rawDelete('DELETE FROM dispositivo WHERE room_id = ?', [noteId]);
     final id = await db.rawDelete('DELETE FROM ambiente WHERE id = ?', [noteId]);
     return id;
   }

@@ -3,6 +3,8 @@
 
 import 'dart:async';
 import 'package:application/app/core/infra/provider/mqtt_provider.dart';
+import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
+import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/devices/device_rgb/model/color.dart';
 import 'package:application/app/mqtt/item_abstract.dart';
@@ -19,20 +21,26 @@ class DeviceRGB extends ItemAbstract
 
   late MQTTClient mqttClient;
 
-  DeviceRGB({ required Dispositivo dispositive }) : super(dispositive: dispositive){
+  DeviceRGB({ Dispositivo? dispositive }) : super(dispositive: dispositive){
     onConnectMQTT();
   }
 
   
   @override
   void onClose() {
+    if(dispositive == null){
+      return;
+    }
       print("Desconectando MQTT..");
       mqttClient.disconnect();
   }
   
   @override
   void onConnectMQTT(){
-   mqttClient = MQTTClient(dispositive, (data) {
+    if(dispositive == null){
+      return;
+    }
+   mqttClient = MQTTClient(dispositive!, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
      mqttClient.connect();
@@ -41,7 +49,9 @@ class DeviceRGB extends ItemAbstract
 
 
   void sendMQTTMessage(RgbColor color)  {
-    //gamb parecida com o javascript cleatimeout e settimeout
+    if(dispositive == null){
+      return;
+    }
     if(_senderTime?.isActive ?? false) _senderTime?.cancel();
     _senderTime= Timer(Duration(seconds: 1),() {
       var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
@@ -85,11 +95,17 @@ class DeviceRGB extends ItemAbstract
       );
   }
 
- 
+  @override
+  void loadCustomData(List<CustomData>? customData) {
+    // TODO: implement loadCustomData
+  }
+
+  @override
+  List<CustomData> saveCustomData() {
+    // TODO: implement saveCustomData
+    throw UnimplementedError();
+  }
 
  
 
-
-  
- 
 }
