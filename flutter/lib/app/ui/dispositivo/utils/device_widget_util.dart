@@ -11,40 +11,19 @@ DeviceType tipoIdToDeviceType(int id){
    return DeviceType.values[id];
  }
 
-Widget onPreviewWidget(Dispositivo device){
-    switch(tipoIdToDeviceType(device.tipoId as int))
-    {
+Widget onPreviewWidget(Dispositivo? device){
 
-      case DeviceType.deviceToggle:
-        return DeviceToggle(dispositive: device).getView();
-
-      case DeviceType.deviceRGB:
-        return DeviceRGB(dispositive: device).getView();
-
-      case DeviceType.devicePower:
-        return DevicePower(dispositive: device).getView();
-
-     default:
-        return const Text("Sem implementação.");
-   }
+    if(device == null ||  device.itemAbstract == null ){
+      return  Text("Sem implementação.");
+    }
+    return device.itemAbstract!.getView();
 }
 
 Widget onPreviewWidgetCustomData(Dispositivo? device){
   
-      if(device == null){
+      if(device == null ||  device.itemAbstract == null ){
         return  Text("Sem implementação.");
       }
-      
-      switch(tipoIdToDeviceType(device.tipoId as int))
-      {
-        case DeviceType.deviceToggle:
-          return DeviceToggle().getCustomOption();
-
-        case DeviceType.deviceRGB:
-          return DeviceRGB().getCustomOption();
-        //editando custom data aqui
-        case DeviceType.devicePower:
-          return DevicePower().getCustomOption();
-      }
+      return device.itemAbstract!.getCustomOption();
     
 }

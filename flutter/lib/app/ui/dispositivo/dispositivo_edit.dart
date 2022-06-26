@@ -22,7 +22,8 @@ class DispositivoEditPage extends GetView<DispositivoController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-          Obx(()=>(Column(
+          Obx(()=>(
+            Column(
               children: [
                DropDownDeviceType(
                 value:  controller.deviceType.value,
@@ -34,7 +35,7 @@ class DispositivoEditPage extends GetView<DispositivoController> {
                 onChange: (){
                   controller.defineFavorite(!controller.isFavorite.value);
                 }),
-                onPreviewWidgetCustomData(controller.dispositivoAtual.value),
+                  onPreviewWidgetCustomData(controller.dispositivoAtual.value),
               ]
               )),
           ),

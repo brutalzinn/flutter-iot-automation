@@ -92,7 +92,7 @@ class DeviceToggle extends ItemAbstract
   }
 
   @override
-  void loadCustomData(List<CustomData>? customData) {
+  void loadCustomData() {
     // TODO: implement loadCustomData
   }
 

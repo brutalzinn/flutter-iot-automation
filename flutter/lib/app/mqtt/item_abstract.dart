@@ -13,7 +13,7 @@ abstract class ItemAbstract
 
   List<CustomData> saveCustomData();
 
-  void loadCustomData(List<CustomData>? customData);
+  void loadCustomData();
 
   void onClose();
 

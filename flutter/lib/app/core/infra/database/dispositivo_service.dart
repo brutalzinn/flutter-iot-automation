@@ -23,8 +23,8 @@ class DispositivoService extends GetxService {
 
   // recuperar todos os dispositivos
   Future<List<Dispositivo>> getAllDevicesById(int deviceId) async {
-    final result = await db.rawQuery('SELECT * FROM dispositivo WHERE room_id = ? ORDER BY id',[deviceId]);
-    print("tentando obter dispositivo com ambiente de id: ${deviceId}");
+    final result = await db.rawQuery('SELECT * FROM dispositivo WHERE room_id = ? ORDER BY id', [deviceId]);
+    print("tentando obter dispositivo com ambiente de id: $deviceId");
     return result.map((json) => Dispositivo.fromJson(json)).toList();
   }
   // recuperar dispositivos favoritos

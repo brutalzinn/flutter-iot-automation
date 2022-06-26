@@ -15,10 +15,9 @@ import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 
 class DevicePower extends ItemAbstract 
 {
-
   RxDouble powerLevel = 0.0.obs;
 
-  RxInt stepLevel = RxInt(1);
+  RxnInt? stepLevel = RxnInt(null);
 
   Timer? _senderTime;
 
@@ -26,6 +25,7 @@ class DevicePower extends ItemAbstract
 
   DevicePower({ Dispositivo? dispositive }) : super(dispositive: dispositive){
     onConnectMQTT();
+    loadCustomData();
   }
 
   @override
@@ -76,7 +76,7 @@ class DevicePower extends ItemAbstract
             // style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             // ),
             Slider(
-            divisions: stepLevel.value,
+            divisions: stepLevel?.value ?? null,
             min: 0.0,
             max: 100.0,
             value: powerLevel.value,
@@ -100,18 +100,23 @@ class DevicePower extends ItemAbstract
         return Obx(()=> Column(
             children:[ 
               DropdownButton<String>(
-                 items : ["1", "5", "10", "15", "20"].map((String dropDownStringItem) {
+                 items : ["0","5", "10"].map((String dropDownStringItem) {
                   return DropdownMenuItem<String>(
                        value : dropDownStringItem,
                        child : Text(dropDownStringItem),
                 ); 
                }).toList(),
-               value: stepLevel.value.toString(),
+               value: stepLevel?.value?.toString(),
                onChanged: (String? novoItemSelecionado) {
-                    stepLevel.value = int.parse(novoItemSelecionado ?? "0");                    
+                    var item = int.parse(novoItemSelecionado ?? "0");
+                    if(item > 0){
+                      stepLevel?.value = item;
+                      return;                                    
+                    }
+                     stepLevel?.value = null;
               },
           ), 
-              Text("Step selecionado \n${stepLevel.value}", style: TextStyle(fontSize: 20.0))           
+              Text("Step selecionado \n${stepLevel?.value}", style: TextStyle(fontSize: 20.0))           
           ]
         ),
         );
@@ -119,21 +124,17 @@ class DevicePower extends ItemAbstract
     }
     
       @override
-      void loadCustomData(List<CustomData>? customData) {
-        if(customData?.length == 0 ){
-            return;
-        }
-         
-          final element = customData?.firstWhereOrNull((element) => element.key.contains("key1"));
-          stepLevel.value = element?.value ?? 1;
+      void loadCustomData() {
+        final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("key1"));
+        stepLevel?.value = element?.value ?? null;
       }
     
-      @override
-      List<CustomData> saveCustomData() {
+       @override
+       List<CustomData> saveCustomData() {
 
-        List<CustomData> teste = [];
-        teste.add(CustomData(key: "key1",value: stepLevel.value));
-        return teste;
+        List<CustomData> customData = [];
+        customData.add(CustomData(key: "key1",value: stepLevel?.value));
+        return customData;
        //  final deviceId = dispositive?.id as int;
        // repository?.executeQuery("UPDATE dispositivo SET custom_data = ? WHERE id = ?", [customDataListToJson(teste) , deviceId]);
       }
