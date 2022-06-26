@@ -34,9 +34,7 @@ class DispositivoController extends GetxController {
 
   Rx<Dispositivo?> dispositivoAtual = Rx<Dispositivo?>(null);
 
-//forma errada. MDS
-  int roomId =  int.parse(Get.parameters['roomId'] ?? "-1");
-  
+//forma errada. MDS  
   RxBool isFavorite = false.obs;
 
   //variaveis do form
@@ -55,12 +53,10 @@ class DispositivoController extends GetxController {
 
   Widget showDeviceView(){
    
-    final deviceId = Get.arguments['id'] as int;
-    final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
-    if(device != null) {
-      device.itemAbstract = obterTipoDispositivo(tipoIdToDeviceType(device.tipoId as int));
-      titulo.value = device.nome ?? "";
-      return onPreviewWidget(device);
+    if(dispositivoAtual.value != null) {
+      dispositivoAtual.value?.itemAbstract = obterTipoDispositivo(tipoIdToDeviceType(dispositivoAtual.value?.tipoId as int));
+      titulo.value = dispositivoAtual.value?.nome ?? "";
+      return onPreviewWidget(dispositivoAtual.value);
     }
     return const Text("Sem implementação.");
   }
@@ -98,14 +94,13 @@ class DispositivoController extends GetxController {
 
   
   onClickDevice(Dispositivo device){
-    Get.to(() => DispositivoClickPage(), arguments: {"id":device.id});
+    dispositivoAtual.value = device;
+    Get.to(() => DispositivoClickPage());
   }
 
   void closeView(){
-    final deviceId = Get.arguments['id'] as int;
-    final device = deviceList.firstWhereOrNull((element) => element.id == deviceId);
-    if(device != null){
-      device.itemAbstract?.onClose();
+    if(dispositivoAtual.value != null){
+      dispositivoAtual.value?.itemAbstract?.onClose();
     }
      Get.back();
   }
@@ -113,6 +108,7 @@ class DispositivoController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
+    int roomId  = int.parse(Get.parameters['roomId'] ?? "-1");
     if(roomId != -1) {
       getAll(roomId);
       return;
@@ -137,7 +133,6 @@ class DispositivoController extends GetxController {
   }
 
   addNote() {
-    dispositivoAtual.value = Dispositivo();
     formKey.currentState?.reset();
     nomeController.text = "";
     descricaoController.text = "";
@@ -151,11 +146,10 @@ class DispositivoController extends GetxController {
     deviceType.value = DeviceType.deviceToggle;
     isFavorite.value = false;
     titulo.value = 'Adicionar dispositivo';
-    Get.to(() => DispositivoEditPage(), arguments: {"room":roomId});
+    Get.to(() => DispositivoEditPage());
   }
 
   editNote(Dispositivo device) {
-    dispositivoAtual.value = device;
     nomeController.text = device.nome ?? "";
     descricaoController.text = device.descricao ?? "";
     mqttPortController.text = device.mqttConfig?.mQTTPORT.toString() ?? "";
@@ -168,13 +162,14 @@ class DispositivoController extends GetxController {
     deviceType.value =  DeviceType.values[device.tipoId!];
     isFavorite.value = device.isFavorite as bool;
     titulo.value = 'Editar Dispositivo';
-    Get.to(() => DispositivoEditPage(), arguments: {"room":device.roomId, "id":device.id});
+    dispositivoAtual.value = device;
+    Get.to(() => DispositivoEditPage());
   }
 
   editMode() {
     if (formKey.currentState!.validate()) {
       loading(true);
-      if (Get.arguments['id'] == null) {
+      if (dispositivoAtual.value == null) {
         saveNote();
       } else {
         updateNote();
@@ -184,7 +179,7 @@ class DispositivoController extends GetxController {
 
   saveNote() async {
     final device = Dispositivo(
-      roomId: roomId,
+      roomId: Get.parameters['roomId'] as int,
       isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
@@ -209,8 +204,8 @@ class DispositivoController extends GetxController {
   updateNote() async {
 
     final dispositivo = Dispositivo(
-      id: Get.arguments['id'] as int,
-      roomId: roomId,
+      id: dispositivoAtual.value?.id,
+      roomId: dispositivoAtual.value?.roomId,
       isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
@@ -239,10 +234,11 @@ class DispositivoController extends GetxController {
       refreshNoteList();
     });
   }
-
-    refreshNoteList() {
+  refreshNoteList() {
     // recuperar lista de notas
-    getAll(roomId);
+     if(dispositivoAtual.value?.roomId != -1) {
+      getAll(dispositivoAtual.value?.roomId as int);
+    }
     //fechar dialog
     Get.back();
     //voltar para a lista de notas

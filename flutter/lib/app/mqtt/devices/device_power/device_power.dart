@@ -105,7 +105,7 @@ class DevicePower extends ItemAbstract
         return Obx(()=> Column(
             children:[ 
               DropdownButton<String>(
-                 items : ["0","5", "10"].map((String dropDownStringItem) {
+                 items : ["0","5", "10", "25", "30"].map((String dropDownStringItem) {
                   return DropdownMenuItem<String>(
                        value : dropDownStringItem,
                        child : Text(dropDownStringItem),
@@ -121,7 +121,7 @@ class DevicePower extends ItemAbstract
                      stepLevel?.value = null;
               },
           ), 
-              Text("Step selecionado \n${stepLevel?.value ?? "Sem STEP"}", style: TextStyle(fontSize: 20.0))           
+              Text("Passos: ${stepLevel?.value ?? "Sem STEP"}", style: TextStyle(fontSize: 20.0))           
           ]
         ),
         );

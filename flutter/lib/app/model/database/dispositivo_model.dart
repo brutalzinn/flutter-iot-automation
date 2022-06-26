@@ -42,7 +42,7 @@ class Dispositivo {
         id: json["id"],
         nome: json["nome"],
         descricao: json["descricao"],
-        roomId: json["roomId"] ?? -1,
+        roomId: json["room_id"] ?? -1,
         isFavorite: json["is_favorite"] as int == 1 ? true : false,
         tipoId: json["tipo_id"] ?? 0,
         mqttConfig:  mqttFromJson(json["mqtt_config"]),
@@ -56,7 +56,7 @@ class Dispositivo {
         "descricao": descricao,
         "is_favorite": isFavorite as int == 1 ? true : false,
         "tipo_id": tipoId,
-        "roomId": roomId,
+        "room_id": roomId,
         "mqtt_config": mqttToJson(mqttConfig),
         "custom_data": customDataListToJson(customData!)
       };

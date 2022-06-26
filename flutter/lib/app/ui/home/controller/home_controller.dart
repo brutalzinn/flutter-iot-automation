@@ -28,14 +28,12 @@ class HomeController extends GetxController {
   FocusNode titleFocusNode = FocusNode();
   FocusNode contentFocusNode = FocusNode();
 
-  //recuperar notas para apresentar na tela inicial
   @override
   void onReady() async {
     super.onReady();
     getAll();
   }
 
-  //recuperar todas as notas
   getAll() {
     loading(true);
     repository.getAll().then((data) {
@@ -44,7 +42,6 @@ class HomeController extends GetxController {
     });
   }
 
-  //tratar formulario para inclusao de uma nota
   addNote() {
     formKey.currentState?.reset();
     nomeController.text = '';
@@ -53,7 +50,7 @@ class HomeController extends GetxController {
     Get.to(() => HomeEditPage());
   }
 
-  //tratar formulario para edicao de uma nota passando id via arguments
+
   editNote(Ambiente note) {
     nomeController.text = note.nome;
     descricaoController.text = note.descricao;
@@ -61,9 +58,6 @@ class HomeController extends GetxController {
     Get.to(() => HomeEditPage(), arguments: note.id);
   }
 
-  //verificar se o formulario esta validado sem erros
-  //e se um id de nota eh enviado para a tela de edicao
-  //a nota sera atualizada, caso contrario sera criada uma nova nota
   editMode() {
     contentFocusNode.unfocus();
     if (formKey.currentState!.validate()) {
@@ -108,29 +102,16 @@ class HomeController extends GetxController {
     });
   }
 
-  // atualizar lista de notas apos uma inclusao, alteracao ou exclusao
   refreshNoteList() {
-    // recuperar lista de notas
     getAll();
-    //fechar dialog
     Get.back();
-    //voltar para a lista de notas
     Get.back();
   }
 
-  // validar campo titulo
   validarTitulo(String? value, String message) {
     if (value == null || value.isEmpty) {
       return message;
     }
     return null;
   }
-
-  //validar campo conteudo
-  // validarConteudo(String? value) {
-  //   if (value == null || value.isEmpty) {
-  //     return 'Preencha o campo Conteúdo.';
-  //   }
-  //   return null;
-  // }
 }
