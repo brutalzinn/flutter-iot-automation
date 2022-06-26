@@ -1,7 +1,12 @@
 import 'dart:convert';
+import 'package:application/app/enum/device_type.dart';
 import 'package:application/app/model/custom_data.dart';
+import 'package:application/app/mqtt/devices/device_power/device_power.dart';
+import 'package:application/app/mqtt/devices/device_rgb/device_rgb.dart';
+import 'package:application/app/mqtt/devices/device_toggle/device_toggle.dart';
 import 'package:application/app/mqtt/item_abstract.dart';
 import 'package:application/app/mqtt/mqtt_connection.dart';
+import 'package:application/app/ui/dispositivo/utils/device_widget_util.dart';
 
 //mudar nome dessa classe
 List<Dispositivo> dispositivoFromJson(String str) =>
@@ -21,13 +26,30 @@ class Dispositivo {
   bool? isFavorite;
   MQTTConnection? mqttConfig;
   List<CustomData>? customData;
-  ItemAbstract? itemAbstract;
+  ItemAbstract? itemAbstract() => obterTipo();
+
+  ItemAbstract? obterTipo(){
+
+     switch(tipoIdToDeviceType(tipoId ?? 0))
+      {
+          case DeviceType.deviceToggle:
+            return DeviceToggle(dispositive: this);
+
+          case DeviceType.deviceRGB:
+            return DeviceRGB(dispositive: this);
+
+          case DeviceType.devicePower:
+            return DevicePower(dispositive: this);
+          
+          default: 
+            return null;
+      }
+  }
 
   Dispositivo( 
   {   
-  this.id,
+    this.id,
     this.roomId,
-    this.itemAbstract,
     this.isFavorite,
     this.customData,
     this.tipoId,

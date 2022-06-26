@@ -32,7 +32,7 @@ class DispositivoController extends GetxController {
 
   final deviceType = Rx<DeviceType>(DeviceType.deviceToggle);
 
-  Rx<Dispositivo?> dispositivoAtual = Rx<Dispositivo?>(null);
+  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo());
 
 //forma errada. MDS  
   RxBool isFavorite = false.obs;
@@ -52,13 +52,11 @@ class DispositivoController extends GetxController {
   TextEditingController mqttInputTopicController = TextEditingController();
 
   Widget showDeviceView(){
-   
-    if(dispositivoAtual.value != null) {
-      dispositivoAtual.value?.itemAbstract = obterTipoDispositivo(tipoIdToDeviceType(dispositivoAtual.value?.tipoId as int));
-      titulo.value = dispositivoAtual.value?.nome ?? "";
-      return onPreviewWidget(dispositivoAtual.value);
-    }
-    return const Text("Sem implementação.");
+ 
+    titulo.value = dispositivoAtual.value.nome ?? "";
+    return onPreviewWidget(dispositivoAtual.value);
+    
+    // return const Text("Sem implementação.");
   }
 
   ItemAbstract obterTipoDispositivo(DeviceType deviceType){
@@ -77,7 +75,6 @@ class DispositivoController extends GetxController {
 
   defineType(DeviceType tipo){
     deviceType.value = tipo;
-    dispositivoAtual.value?.itemAbstract = obterTipoDispositivo(tipo);
   }
 
   defineFavorite(bool deviceFavorite){
@@ -99,9 +96,7 @@ class DispositivoController extends GetxController {
   }
 
   void closeView(){
-    if(dispositivoAtual.value != null){
-      dispositivoAtual.value?.itemAbstract?.onClose();
-    }
+    dispositivoAtual.value.itemAbstract()?.onClose();
      Get.back();
   }
 
@@ -169,7 +164,7 @@ class DispositivoController extends GetxController {
   editMode() {
     if (formKey.currentState!.validate()) {
       loading(true);
-      if (dispositivoAtual.value == null) {
+      if (dispositivoAtual.value.id == null) {
         saveNote();
       } else {
         updateNote();
@@ -179,12 +174,12 @@ class DispositivoController extends GetxController {
 
   saveNote() async {
     final device = Dispositivo(
-      roomId: Get.parameters['roomId'] as int,
+      roomId: int.parse(Get.parameters['roomId'] ?? "-1"),
       isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
-      customData: [],
+      // customData: dispositivoAtual.value?.obterTipo().saveCustomData() ?? [],
       mqttConfig: MQTTConnection(
         mQTTHost: mqttHostController.text.trim(), 
         mQTTPORT: mqttPortController.text.trim() != "" ? int.parse(mqttPortController.text.trim()) : 1883, 
@@ -195,6 +190,8 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
+    device.customData = device.itemAbstract()?.saveCustomData();
+    dispositivoAtual.value = device;
     repository.save(device).then((data) {
       loading(false);
       refreshNoteList();
@@ -204,12 +201,12 @@ class DispositivoController extends GetxController {
   updateNote() async {
 
     final dispositivo = Dispositivo(
-      id: dispositivoAtual.value?.id,
-      roomId: dispositivoAtual.value?.roomId,
+      id: dispositivoAtual.value.id,
+      roomId: dispositivoAtual.value.roomId,
       isFavorite: isFavorite.value,
       tipoId: deviceType.value.index,
       nome: nomeController.text.trim(),
-      customData: dispositivoAtual.value?.itemAbstract?.saveCustomData() ?? [],
+      customData: dispositivoAtual.value.itemAbstract()?.saveCustomData(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(),
        mQTTPORT: int.parse(mqttPortController.text.trim()),
@@ -236,8 +233,8 @@ class DispositivoController extends GetxController {
   }
   refreshNoteList() {
     // recuperar lista de notas
-     if(dispositivoAtual.value?.roomId != -1) {
-      getAll(dispositivoAtual.value?.roomId as int);
+    if(dispositivoAtual.value.roomId != -1) {
+      getAll(int.parse(Get.parameters['roomId'] ?? "-1"));
     }
     //fechar dialog
     Get.back();

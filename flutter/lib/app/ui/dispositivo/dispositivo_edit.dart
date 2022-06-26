@@ -35,9 +35,9 @@ class DispositivoEditPage extends GetView<DispositivoController> {
                 onChange: (){
                   controller.defineFavorite(!controller.isFavorite.value);
                 }),
-                  onPreviewWidgetCustomData(controller.dispositivoAtual.value),
-              ]
-              )),
+                  onPreviewWidgetCustomData(controller.dispositivoAtual.value)
+                  
+             ])),
           ),
             TextFormField(
                 decoration: const InputDecoration(
