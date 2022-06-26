@@ -85,11 +85,16 @@ class DevicePower extends ItemAbstract
               sendMQTTMessage();
             },
           ),
-           Text("Potência: ${powerLevel.value.toInt()}",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-           ]))
-            
+           Column(
+             children: [
+               Text("Potência: ${powerLevel.value.toInt()}",
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+
+              Text("Steps selecionado \n${stepLevel?.value ?? "Sem STEP"}", style: const TextStyle(fontSize: 20.0))
+             ]),
+            ],
+            ),
+            ),
         ],
       ),
     );
@@ -106,7 +111,7 @@ class DevicePower extends ItemAbstract
                        child : Text(dropDownStringItem),
                 ); 
                }).toList(),
-               value: stepLevel?.value?.toString(),
+               value: stepLevel?.value?.toString() ?? "0",
                onChanged: (String? novoItemSelecionado) {
                     var item = int.parse(novoItemSelecionado ?? "0");
                     if(item > 0){
@@ -116,7 +121,7 @@ class DevicePower extends ItemAbstract
                      stepLevel?.value = null;
               },
           ), 
-              Text("Step selecionado \n${stepLevel?.value}", style: TextStyle(fontSize: 20.0))           
+              Text("Step selecionado \n${stepLevel?.value ?? "Sem STEP"}", style: TextStyle(fontSize: 20.0))           
           ]
         ),
         );

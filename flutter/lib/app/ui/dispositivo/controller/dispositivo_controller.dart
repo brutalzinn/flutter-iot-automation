@@ -35,7 +35,7 @@ class DispositivoController extends GetxController {
   Rx<Dispositivo?> dispositivoAtual = Rx<Dispositivo?>(null);
 
 //forma errada. MDS
-  int roomId = Get.parameters['roomId'] != null ? int.parse(Get.parameters['roomId'] as String) : -1;
+  int roomId =  int.parse(Get.parameters['roomId'] ?? "-1");
   
   RxBool isFavorite = false.obs;
 
@@ -120,9 +120,9 @@ class DispositivoController extends GetxController {
     getAllFavoriteDevices();
   }
 
-  getAll(int bedRoomId) {
+  getAll(int ambienteId) {
     loading(true);
-    repository.getAllDevicesById(bedRoomId).then((data) {
+    repository.getAllDevicesByAmbiente(ambienteId).then((data) {
       deviceList.value = data;
       loading(false);
     });

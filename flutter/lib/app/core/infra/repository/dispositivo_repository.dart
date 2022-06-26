@@ -13,8 +13,8 @@ class DispositivoRepository {
     return api.get(dispositivoId);
   }
 
-  getAllDevicesById(int deviceId) {
-    return api.getAllDevicesById(deviceId);
+  getAllDevicesByAmbiente(int ambienteId) {
+    return api.getAllDevicesByAmbiente(ambienteId);
   }
 
   getAllFavoriteDevices() {

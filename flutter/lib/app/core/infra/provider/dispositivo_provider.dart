@@ -11,9 +11,9 @@ class DispositivoProvider {
     return await dispositivoService.get(dispositivoId);
   }
 
-  Future<List<Dispositivo>> getAllDevicesById(int bedRoomId) async {
+  Future<List<Dispositivo>> getAllDevicesByAmbiente(int ambienteId) async {
     // await Future.delayed(Duration(seconds: 2));
-    return await dispositivoService.getAllDevicesById(bedRoomId);
+    return await dispositivoService.getAllDevicesByAmbiente(ambienteId);
   }
 
   Future<List<Dispositivo>> getAllFavoriteDevices() async {
