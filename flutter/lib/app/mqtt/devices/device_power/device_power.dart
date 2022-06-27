@@ -24,7 +24,7 @@ class DevicePower extends ItemAbstract
   late MQTTClient mqttClient;
 
   DevicePower({ Dispositivo? dispositive }) : super(dispositive: dispositive){
-    onConnectMQTT();
+     onConnectMQTT();
     loadCustomData();
   }
 
@@ -130,19 +130,16 @@ class DevicePower extends ItemAbstract
     
       @override
       void loadCustomData() {
-        final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("key1"));
-        stepLevel?.value = element?.value ?? null;
+          final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("key1"));
+          stepLevel?.value = element?.value ?? null;
       }
     
        @override
        List<CustomData> saveCustomData() {
-
-        List<CustomData> customData = [];
-        customData.add(CustomData(key: "key1",value: stepLevel?.value));
-        return customData;
-       //  final deviceId = dispositive?.id as int;
-       // repository?.executeQuery("UPDATE dispositivo SET custom_data = ? WHERE id = ?", [customDataListToJson(teste) , deviceId]);
-      }
+          List<CustomData> customData = [];
+          customData.add(CustomData(key: "key1",value: stepLevel?.value));
+          return customData;
+        }
 
  
 

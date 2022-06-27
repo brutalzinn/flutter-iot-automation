@@ -26,9 +26,9 @@ class DispositivoEditPage extends GetView<DispositivoController> {
             Column(
               children: [
                DropDownDeviceType(
-                value:  controller.deviceType.value,
+                value: controller.tipoDispositivo.value,
                 onChange: (value){
-                  controller.defineType(value);
+                    controller.definirTipo(value);
                   }),
               FavoriteWidgetSelector(
                 isFavorite: controller.isFavorite.value,
@@ -36,7 +36,6 @@ class DispositivoEditPage extends GetView<DispositivoController> {
                   controller.defineFavorite(!controller.isFavorite.value);
                 }),
                   onPreviewWidgetCustomData(controller.dispositivoAtual.value)
-                  
              ])),
           ),
             TextFormField(

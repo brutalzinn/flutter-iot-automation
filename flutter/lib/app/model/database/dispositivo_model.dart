@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:application/app/enum/device_type.dart';
+import 'package:application/app/enum/extension/device_type_extension.dart';
 import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/mqtt/devices/device_power/device_power.dart';
 import 'package:application/app/mqtt/devices/device_rgb/device_rgb.dart';
@@ -20,17 +21,20 @@ class Dispositivo {
 
   int? id;
   String? nome;
-  int? tipoId;
+  int tipoId;
   String? descricao;
-  int? roomId;
+  int roomId;
   bool? isFavorite;
   MQTTConnection? mqttConfig;
   List<CustomData>? customData;
-  ItemAbstract? itemAbstract() => obterTipo();
+  
+  ItemAbstract obterEspecialidade() => _especialidade();
+  DeviceType obterTipo() => tipoIdToDeviceType(tipoId);
+  definirTipo(DeviceType tipo) => tipo.tipoId;
 
-  ItemAbstract? obterTipo(){
+  ItemAbstract _especialidade(){
 
-     switch(tipoIdToDeviceType(tipoId ?? 0))
+     switch(tipoIdToDeviceType(tipoId))
       {
           case DeviceType.deviceToggle:
             return DeviceToggle(dispositive: this);
@@ -40,19 +44,16 @@ class Dispositivo {
 
           case DeviceType.devicePower:
             return DevicePower(dispositive: this);
-          
-          default: 
-            return null;
       }
   }
 
   Dispositivo( 
   {   
     this.id,
-    this.roomId,
+    required this.tipoId,
+    required this.roomId,
     this.isFavorite,
     this.customData,
-    this.tipoId,
     this.nome,
     this.descricao,
     this.mqttConfig

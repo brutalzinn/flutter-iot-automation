@@ -14,4 +14,10 @@ extension DeviceTypeExtension on DeviceType{
    }
  }
 
+ int get tipoId{
+    return this.index;
+ }
+
+
+
 }
