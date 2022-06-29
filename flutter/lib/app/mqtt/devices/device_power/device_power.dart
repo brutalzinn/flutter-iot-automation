@@ -114,11 +114,11 @@ class DevicePower extends ItemAbstract
                value: stepLevel?.value?.toString() ?? "0",
                onChanged: (String? novoItemSelecionado) {
                     var item = int.parse(novoItemSelecionado ?? "0");
-                    if(item > 0){
+                  //  if(item > 0){
                       stepLevel?.value = item;
-                      return;                                    
-                    }
-                     stepLevel?.value = null;
+                    //   return;                                    
+                    // }
+                   //  stepLevel?.value = null;
               },
           ), 
               Text("Passos: ${stepLevel?.value ?? "Sem STEP"}", style: TextStyle(fontSize: 20.0))           

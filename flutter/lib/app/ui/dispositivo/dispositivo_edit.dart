@@ -1,4 +1,3 @@
-import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/ui/dispositivo/controller/dispositivo_controller.dart';
 import 'package:application/app/ui/dispositivo/utils/device_widget_util.dart';
 import 'package:application/app/ui/widgets/dropdown_widget_devices_type.dart';
@@ -26,7 +25,7 @@ class DispositivoEditPage extends GetView<DispositivoController> {
             Column(
               children: [
                DropDownDeviceType(
-                value: controller.tipoDispositivo.value,
+                value: controller.tipoDispositivoAtual.value,
                 onChange: (value){
                     controller.definirTipo(value);
                   }),
@@ -35,7 +34,7 @@ class DispositivoEditPage extends GetView<DispositivoController> {
                 onChange: (){
                   controller.defineFavorite(!controller.isFavorite.value);
                 }),
-                  onPreviewWidgetCustomData(controller.dispositivoAtual.value)
+                onPreviewWidgetCustomData(controller.dispositivoAtual.value)
              ])),
           ),
             TextFormField(

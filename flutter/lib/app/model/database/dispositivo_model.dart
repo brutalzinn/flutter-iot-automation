@@ -29,8 +29,12 @@ class Dispositivo {
   List<CustomData>? customData;
   
   ItemAbstract obterEspecialidade() => _especialidade();
-  DeviceType obterTipo() => tipoIdToDeviceType(tipoId);
-  definirTipo(DeviceType tipo) => tipo.tipoId;
+
+  DeviceType obterTipo() => DeviceType.values[tipoId];
+  
+  definirTipo(DeviceType tipo) {
+    this.tipoId = tipo.toId;
+  } 
 
   ItemAbstract _especialidade(){
 

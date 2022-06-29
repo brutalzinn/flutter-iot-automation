@@ -30,10 +30,11 @@ class DispositivoController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositivo>[].obs;
 
-  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(tipoId: 0, roomId: 0));
+  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(tipoId: 1, roomId: 0));
+  Rx<DeviceType> tipoDispositivoAtual = Rx<DeviceType>(DeviceType.devicePower);
 
-  Rx<DeviceType> tipoDispositivo = Rx<DeviceType>(DeviceType.devicePower);
-//forma errada. MDS  
+  //Rx<DeviceType> tipoDispositivo = Rx<DeviceType>(DeviceType.devicePower);
+  //forma errada. MDS  
   RxBool isFavorite = false.obs;
 
   //variaveis do form
@@ -56,7 +57,8 @@ class DispositivoController extends GetxController {
   }
 
   definirTipo(DeviceType tipo){
-    tipoDispositivo.value = tipo;
+    tipoDispositivoAtual.value = tipo;
+    dispositivoAtual.value.definirTipo(tipo);
   }
 
   defineFavorite(bool deviceFavorite){
@@ -65,7 +67,7 @@ class DispositivoController extends GetxController {
  
   String getAmbience(){
    return Get.parameters["room"] as String;
- } 
+  } 
 
  String getDeviceTypeEnumTitle(int? type){
    return tipoIdToDeviceType(type ?? 0).displayTitle;
@@ -79,6 +81,7 @@ class DispositivoController extends GetxController {
 
   void closeView(){
     dispositivoAtual.value.obterEspecialidade().onClose();
+    dispositivoAtual.value = Dispositivo(tipoId: 1, roomId: 0);
      Get.back();
   }
 
@@ -126,6 +129,7 @@ class DispositivoController extends GetxController {
   }
 
   editNote(Dispositivo device) {
+    dispositivoAtual.value = device;
     nomeController.text = device.nome ?? "";
     descricaoController.text = device.descricao ?? "";
     mqttPortController.text = device.mqttConfig?.mQTTPORT.toString() ?? "";
@@ -136,9 +140,9 @@ class DispositivoController extends GetxController {
     mqttInputTopicController.text = device.mqttConfig?.mqTTInputTopic ?? "";
     mqttPasswordController.text = device.mqttConfig?.mQTTPASSWORD ?? "";
     isFavorite.value = device.isFavorite as bool;
-    tipoDispositivo.value = device.obterTipo();
+    tipoDispositivoAtual.value = device.obterTipo();
+  //  dispositivoAtual.value.definirTipo(device.obterTipo());
     titulo.value = 'Editar Dispositivo';
-    dispositivoAtual.value = device;
     Get.to(() => DispositivoEditPage());
   }
 
@@ -157,7 +161,7 @@ class DispositivoController extends GetxController {
     final device = Dispositivo(
       roomId: dispositivoAtual.value.roomId,
       isFavorite: isFavorite.value,
-      tipoId: tipoDispositivo.value.tipoId,
+      tipoId: dispositivoAtual.value.tipoId,
       nome: nomeController.text.trim(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(
@@ -185,7 +189,6 @@ class DispositivoController extends GetxController {
       isFavorite: isFavorite.value,
       tipoId: dispositivoAtual.value.tipoId,
       nome: nomeController.text.trim(),
-      customData: dispositivoAtual.value.obterEspecialidade().saveCustomData(),
       descricao: descricaoController.text.trim(),
       mqttConfig: MQTTConnection(mQTTHost: mqttHostController.text.trim(),
        mQTTPORT: int.parse(mqttPortController.text.trim()),
@@ -196,7 +199,7 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
-
+    dispositivo.customData = dispositivo.obterEspecialidade().saveCustomData();
     repository.update(dispositivo).then((data) {
       loading(false);
       refreshNoteList();
