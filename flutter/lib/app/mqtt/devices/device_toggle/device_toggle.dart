@@ -1,6 +1,5 @@
 
 import 'package:application/app/core/infra/provider/mqtt_provider.dart';
-import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
 import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/item_abstract.dart';
@@ -14,30 +13,28 @@ class DeviceToggle extends ItemAbstract
   Rx<String>? messagePayload = Rx<String>("");
   RxBool toggleButton = false.obs;
 
-  late MQTTClient mqttClient;
+  MQTTClient? mqttClient;
 
-  DeviceToggle({ Dispositivo? dispositive}) : super(dispositive: dispositive){
-    onConnectMQTT();
-  }
+  DeviceToggle({ Dispositivo? dispositive}) : super(dispositive: dispositive);
   
   @override
   void onClose() {
-      if(dispositive == null){
+      if(dispositive == null || mqttClient == null){
         return;
       }
       print("Desconectando MQTT..");
-      mqttClient.disconnect();
+      mqttClient?.disconnect();
   }
   
   @override
-  void onConnectMQTT(){
-    if(dispositive == null){
+  void onConnect(){
+    if(dispositive == null || mqttClient == null){
       return;
     }
    mqttClient = MQTTClient(dispositive!, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
-     mqttClient.connect();
+     mqttClient?.connect();
   }
 
   String mqttTranslator(bool status){
@@ -45,12 +42,12 @@ class DeviceToggle extends ItemAbstract
   }
 
   void sendMQTTMessage()  {
-    if(dispositive == null){
+    if(dispositive == null || mqttClient == null){
       return;
     }
     toggleButton.value = !toggleButton.value;
     var message = MessagePayload(message: {"status":mqttTranslator(toggleButton.value)}, event: 0);
-    mqttClient.sendMessage(message);
+    mqttClient?.sendMessage(message);
   }
   
   
@@ -93,21 +90,16 @@ class DeviceToggle extends ItemAbstract
 
   @override
   void loadCustomData() {
-    // TODO: implement loadCustomData
+     final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("key1"));
+    //stepLevel?.value = element?.value ?? null;
+
   }
 
   @override
-  List<CustomData> saveCustomData() {
-    // TODO: implement saveCustomData
-    throw UnimplementedError();
+  List<CustomData> createCustomData() {
+      List<CustomData> customData = [];
+      customData.add(CustomData(key: "key1",value: 666));
+      return customData;
   }
-  
 
- 
-
- 
-
-
-  
- 
 }

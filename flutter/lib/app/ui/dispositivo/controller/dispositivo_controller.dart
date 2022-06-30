@@ -30,8 +30,8 @@ class DispositivoController extends GetxController {
   //variaveis da lista de notas
   final deviceList = <Dispositivo>[].obs;
 
-  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(tipoId: 1, roomId: 0));
-  Rx<DeviceType> tipoDispositivoAtual = Rx<DeviceType>(DeviceType.devicePower);
+  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(tipoId: 0, roomId: 0));
+  Rx<DeviceType> tipoDispositivoAtual = Rx<DeviceType>(DeviceType.deviceToggle);
 
   //Rx<DeviceType> tipoDispositivo = Rx<DeviceType>(DeviceType.devicePower);
   //forma errada. MDS  
@@ -81,8 +81,8 @@ class DispositivoController extends GetxController {
 
   void closeView(){
     dispositivoAtual.value.obterEspecialidade().onClose();
-    dispositivoAtual.value = Dispositivo(tipoId: 1, roomId: 0);
-     Get.back();
+    dispositivoAtual.value = Dispositivo(tipoId: 0, roomId: 0);
+    Get.back();
   }
 
   @override
@@ -141,6 +141,8 @@ class DispositivoController extends GetxController {
     mqttPasswordController.text = device.mqttConfig?.mQTTPASSWORD ?? "";
     isFavorite.value = device.isFavorite as bool;
     tipoDispositivoAtual.value = device.obterTipo();
+    //device.customData = device.obterEspecialidade().createCustomData();
+
   //  dispositivoAtual.value.definirTipo(device.obterTipo());
     titulo.value = 'Editar Dispositivo';
     Get.to(() => DispositivoEditPage());
@@ -174,7 +176,7 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
-    device.customData = device.obterEspecialidade().saveCustomData();
+    device.customData = device.obterEspecialidade().createCustomData();
     repository.save(device).then((data) {
       loading(false);
       refreshNoteList();
@@ -199,7 +201,7 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
-    dispositivo.customData = dispositivo.obterEspecialidade().saveCustomData();
+    dispositivo.customData = dispositivo.obterEspecialidade().createCustomData();
     repository.update(dispositivo).then((data) {
       loading(false);
       refreshNoteList();
@@ -213,11 +215,9 @@ class DispositivoController extends GetxController {
       refreshNoteList();
     });
   }
-  refreshNoteList() {
+    refreshNoteList() {
     // recuperar lista de notas
-   
     getAll(dispositivoAtual.value.roomId);
-    
     //fechar dialog
     Get.back();
     //voltar para a lista de notas

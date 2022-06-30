@@ -8,6 +8,7 @@ DeviceType tipoIdToDeviceType(int id){
  }
 
 Widget onPreviewWidget(Dispositivo dispositivo){
+    dispositivo.obterEspecialidade().onConnect();
     return dispositivo.obterEspecialidade().getView();
 }
 

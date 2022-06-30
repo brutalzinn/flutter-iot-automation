@@ -11,11 +11,11 @@ abstract class ItemAbstract
 
   Widget getCustomOption();
 
-  List<CustomData> saveCustomData();
+  List<CustomData> createCustomData();
 
   void loadCustomData();
 
   void onClose();
 
-  void onConnectMQTT();
+  void onConnect();
 }

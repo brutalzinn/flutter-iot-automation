@@ -3,7 +3,6 @@
 
 import 'dart:async';
 import 'package:application/app/core/infra/provider/mqtt_provider.dart';
-import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
 import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/devices/device_rgb/model/color.dart';
@@ -19,43 +18,40 @@ class DeviceRGB extends ItemAbstract
   RxBool toggleButton = false.obs;
   Timer? _senderTime;
 
-  late MQTTClient mqttClient;
+  MQTTClient? mqttClient;
 
-  DeviceRGB({ Dispositivo? dispositive }) : super(dispositive: dispositive){
-    onConnectMQTT();
-  }
-
+  DeviceRGB({ Dispositivo? dispositive }) : super(dispositive: dispositive);
   
   @override
   void onClose() {
-    if(dispositive == null){
+    if(dispositive == null || mqttClient == null){
       return;
     }
       print("Desconectando MQTT..");
-      mqttClient.disconnect();
+      mqttClient?.disconnect();
   }
   
   @override
-  void onConnectMQTT(){
-    if(dispositive == null){
+  void onConnect(){
+    if(dispositive == null || mqttClient == null){
       return;
     }
    mqttClient = MQTTClient(dispositive!, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
-     mqttClient.connect();
+     mqttClient?.connect();
 
   }
 
 
   void sendMQTTMessage(RgbColor color)  {
-    if(dispositive == null){
+    if(dispositive == null || mqttClient == null){
       return;
     }
     if(_senderTime?.isActive ?? false) _senderTime?.cancel();
     _senderTime= Timer(Duration(seconds: 1),() {
       var message = MessagePayload(message: {"payload": color.toJson()},  event: 0);
-      mqttClient.sendMessage(message);
+      mqttClient?.sendMessage(message);
     });
     
   }
@@ -101,8 +97,8 @@ class DeviceRGB extends ItemAbstract
   }
 
   @override
-  List<CustomData> saveCustomData() {
-    // TODO: implement saveCustomData
+  List<CustomData> createCustomData() {
+    // TODO: implement createCustomData
     throw UnimplementedError();
   }
 
