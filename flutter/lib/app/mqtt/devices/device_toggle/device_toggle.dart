@@ -7,7 +7,7 @@ import 'package:application/app/mqtt/mqtt_payload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DeviceToggle extends ItemAbstract 
+class DeviceToggle extends TipoDispositivoAbstract 
 {
 
   Rx<String>? messagePayload = Rx<String>("");

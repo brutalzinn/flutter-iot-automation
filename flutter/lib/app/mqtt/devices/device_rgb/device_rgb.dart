@@ -11,7 +11,7 @@ import 'package:application/app/mqtt/mqtt_payload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-class DeviceRGB extends ItemAbstract 
+class DeviceRGB extends TipoDispositivoAbstract 
 {
 
   Rx<String>? messagePayload = Rx<String>("");
@@ -93,13 +93,18 @@ class DeviceRGB extends ItemAbstract
 
   @override
   void loadCustomData() {
-    // TODO: implement loadCustomData
+     final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("red"));
+    //stepLevel?.value = element?.value ?? null;
+
   }
 
   @override
   List<CustomData> createCustomData() {
-    // TODO: implement createCustomData
-    throw UnimplementedError();
+      List<CustomData> customData = [];
+      customData.add(CustomData(key: "red",value: 255));
+      customData.add(CustomData(key: "blue",value: 255));
+      customData.add(CustomData(key: "green",value: 255));
+      return customData;
   }
 
  

@@ -2,12 +2,7 @@
 import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
 import 'package:application/app/enum/device_type.dart';
 import 'package:application/app/enum/extension/device_type_extension.dart';
-import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
-import 'package:application/app/mqtt/devices/device_power/device_power.dart';
-import 'package:application/app/mqtt/devices/device_rgb/device_rgb.dart';
-import 'package:application/app/mqtt/devices/device_toggle/device_toggle.dart';
-import 'package:application/app/mqtt/item_abstract.dart';
 import 'package:application/app/mqtt/mqtt_connection.dart';
 import 'package:application/app/ui/dispositivo/dispositivo_click.dart';
 import 'package:application/app/ui/dispositivo/dispositivo_edit.dart';
@@ -21,16 +16,13 @@ class DispositivoController extends GetxController {
 
   DispositivoController(this.repository);
 
-  //variavel do titulo
-  RxString titulo = "".obs;
+  RxString titulo = RxString("");
 
-  //variavel que controla o loading
-  RxBool loading = false.obs;
+  RxBool loading = RxBool(false);
 
-  //variaveis da lista de notas
   final deviceList = <Dispositivo>[].obs;
 
-  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(tipoId: 0, roomId: 0));
+  Rx<Dispositivo> dispositivoAtual = Rx<Dispositivo>(Dispositivo(id:null, tipoId: 0, roomId: 0));
   Rx<DeviceType> tipoDispositivoAtual = Rx<DeviceType>(DeviceType.deviceToggle);
 
   //Rx<DeviceType> tipoDispositivo = Rx<DeviceType>(DeviceType.devicePower);
@@ -56,6 +48,11 @@ class DispositivoController extends GetxController {
     return onPreviewWidget(dispositivoAtual.value);
   }
 
+  onClickDevice(Dispositivo device){
+    dispositivoAtual.value = device;
+    Get.to(() => DispositivoClickPage());
+  }
+
   definirTipo(DeviceType tipo){
     tipoDispositivoAtual.value = tipo;
     dispositivoAtual.value.definirTipo(tipo);
@@ -73,27 +70,22 @@ class DispositivoController extends GetxController {
    return tipoIdToDeviceType(type ?? 0).displayTitle;
  } 
 
-  
-  onClickDevice(Dispositivo device){
-    dispositivoAtual.value = device;
-    Get.to(() => DispositivoClickPage());
-  }
-
   void closeView(){
     dispositivoAtual.value.obterEspecialidade().onClose();
-    dispositivoAtual.value = Dispositivo(tipoId: 0, roomId: 0);
+    dispositivoAtual.value = Dispositivo(id: null, tipoId: 0, roomId: 0);
     Get.back();
   }
 
   @override
-  void onReady() async {
-    super.onReady();
+  void onReady() {
     dispositivoAtual.value.roomId = int.parse(Get.parameters['roomId'] ?? "-1");
     if(dispositivoAtual.value.roomId != -1) {
       getAll(dispositivoAtual.value.roomId);
       return;
     }
     getAllFavoriteDevices();
+    super.onReady();
+
   }
 
   getAll(int ambienteId) {
@@ -124,26 +116,28 @@ class DispositivoController extends GetxController {
     mqttInputTopicController.text = "";
     mqttPasswordController.text = "";
     isFavorite.value = false;
+    dispositivoAtual.value.customData = [];
+    definirTipo(DeviceType.deviceToggle);
     titulo.value = 'Adicionar dispositivo';
     Get.to(() => DispositivoEditPage());
   }
 
-  editNote(Dispositivo device) {
-    dispositivoAtual.value = device;
-    nomeController.text = device.nome ?? "";
-    descricaoController.text = device.descricao ?? "";
-    mqttPortController.text = device.mqttConfig?.mQTTPORT.toString() ?? "";
-    mqttHostController.text = device.mqttConfig?.mQTTHost ?? "";
-    mqttIdUserController.text = device.mqttConfig?.mQTTID ?? "";
-    mqttUserController.text = device.mqttConfig?.mQTTUSER ?? "";
-    mqttOutTopicController.text = device.mqttConfig?.mqTTOutTopic ?? "";
-    mqttInputTopicController.text = device.mqttConfig?.mqTTInputTopic ?? "";
-    mqttPasswordController.text = device.mqttConfig?.mQTTPASSWORD ?? "";
-    isFavorite.value = device.isFavorite as bool;
-    tipoDispositivoAtual.value = device.obterTipo();
+  editNote(Dispositivo dispositivo) {
+    dispositivoAtual.value = dispositivo;
+    nomeController.text = dispositivo.nome ?? "";
+    descricaoController.text = dispositivo.descricao ?? "";
+    mqttPortController.text = dispositivo.mqttConfig?.mQTTPORT.toString() ?? "";
+    mqttHostController.text = dispositivo.mqttConfig?.mQTTHost ?? "";
+    mqttIdUserController.text = dispositivo.mqttConfig?.mQTTID ?? "";
+    mqttUserController.text = dispositivo.mqttConfig?.mQTTUSER ?? "";
+    mqttOutTopicController.text = dispositivo.mqttConfig?.mqTTOutTopic ?? "";
+    mqttInputTopicController.text = dispositivo.mqttConfig?.mqTTInputTopic ?? "";
+    mqttPasswordController.text = dispositivo.mqttConfig?.mQTTPASSWORD ?? "";
+    isFavorite.value = dispositivo.isFavorite as bool;
+    tipoDispositivoAtual.value = dispositivo.obterTipo();
     //device.customData = device.obterEspecialidade().createCustomData();
+    definirTipo(dispositivo.obterTipo());
 
-  //  dispositivoAtual.value.definirTipo(device.obterTipo());
     titulo.value = 'Editar Dispositivo';
     Get.to(() => DispositivoEditPage());
   }
@@ -160,7 +154,7 @@ class DispositivoController extends GetxController {
   }
 
   saveNote() async {
-    final device = Dispositivo(
+    final dispositivo = Dispositivo(
       roomId: dispositivoAtual.value.roomId,
       isFavorite: isFavorite.value,
       tipoId: dispositivoAtual.value.tipoId,
@@ -176,8 +170,10 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
-    device.customData = device.obterEspecialidade().createCustomData();
-    repository.save(device).then((data) {
+
+    dispositivo.customData = dispositivoAtual.value.obterEspecialidade().createCustomData();
+
+    repository.save(dispositivo).then((data) {
       loading(false);
       refreshNoteList();
     });
@@ -201,7 +197,9 @@ class DispositivoController extends GetxController {
         mqTTInputTopic: mqttInputTopicController.text.trim()
         )
     );
-    dispositivo.customData = dispositivo.obterEspecialidade().createCustomData();
+
+    dispositivo.customData = dispositivoAtual.value.obterEspecialidade().createCustomData();
+    
     repository.update(dispositivo).then((data) {
       loading(false);
       refreshNoteList();

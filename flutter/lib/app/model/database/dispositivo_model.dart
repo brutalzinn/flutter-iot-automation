@@ -18,7 +18,7 @@ String dispositivoToJson(List<Dispositivo> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Dispositivo {
-
+  //mudar depois
   int? id;
   String? nome;
   int tipoId;
@@ -27,32 +27,37 @@ class Dispositivo {
   bool? isFavorite;
   MQTTConnection? mqttConfig;
   List<CustomData>? customData;
-  
-  ItemAbstract obterEspecialidade() => _especialidade();
+
+  TipoDispositivoAbstract _tipoDispositivo = DeviceToggle();
+  TipoDispositivoAbstract obterEspecialidade() => _tipoDispositivo;
 
   DeviceType obterTipo() => DeviceType.values[tipoId];
   
   definirTipo(DeviceType tipo) {
     this.tipoId = tipo.toId;
+    _configurarEspecialidade();
   } 
 
-  ItemAbstract _especialidade(){
-
-     switch(tipoIdToDeviceType(tipoId))
+   _configurarEspecialidade()
+   {
+     switch(tipoIdToDeviceType(this.tipoId))
       {
           case DeviceType.deviceToggle:
-            return DeviceToggle(dispositive: this);
+            this._tipoDispositivo =  DeviceToggle(dispositive: this);
+          break;
 
           case DeviceType.deviceRGB:
-            return DeviceRGB(dispositive: this);
+            this._tipoDispositivo = DeviceRGB(dispositive: this);
+          break;
 
           case DeviceType.devicePower:
-            return DevicePower(dispositive: this);
+            this._tipoDispositivo = DevicePower(dispositive: this);
+          break;
       }
-  }
 
-  Dispositivo( 
-  {   
+    }
+
+  Dispositivo({   
     this.id,
     required this.tipoId,
     required this.roomId,
@@ -61,9 +66,22 @@ class Dispositivo {
     this.nome,
     this.descricao,
     this.mqttConfig
+    }){
+    _configurarEspecialidade();
     }
-    
-  );
+ 
+  // Dispositivo( 
+  //   {   
+  //   this.id,
+  //   required this.tipoId,
+  //   required this.roomId,
+  //   this.isFavorite,
+  //   this.customData,
+  //   this.nome,
+  //   this.descricao,
+  //   this.mqttConfig
+  //   }
+  // );
 
   factory Dispositivo.fromJson(Map<String, dynamic> json) => Dispositivo(
         id: json["id"],

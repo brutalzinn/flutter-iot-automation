@@ -3,26 +3,24 @@
 
 import 'dart:async';
 import 'package:application/app/core/infra/provider/mqtt_provider.dart';
-import 'package:application/app/core/infra/repository/dispositivo_repository.dart';
 import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:application/app/mqtt/item_abstract.dart';
-import 'package:application/app/mqtt/mqtt_connection.dart';
 import 'package:application/app/mqtt/mqtt_payload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DevicePower extends ItemAbstract 
+class DevicePower extends TipoDispositivoAbstract 
 {
   RxDouble powerLevel = 0.0.obs;
 
-  RxnInt? stepLevel = RxnInt(null);
+  RxnInt stepLevel = RxnInt(0);
 
   Timer? _senderTime;
 
   MQTTClient? mqttClient;
 
-  List<String> items = ["0","5", "10", "25", "30"];
+  List<int> items = [0, 10, 20, 30, 40, 50];
 
   DevicePower({ Dispositivo? dispositive }) : super(dispositive: dispositive){
      loadCustomData();
@@ -73,7 +71,7 @@ class DevicePower extends ItemAbstract
             // style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             // ),
             Slider(
-            divisions: stepLevel?.value ?? null,
+            divisions: stepLevel.value != 0 ? stepLevel.value : null,
             min: 0.0,
             max: 100.0,
             value: powerLevel.value,
@@ -86,7 +84,7 @@ class DevicePower extends ItemAbstract
              children: [
                Text("Potência: ${powerLevel.value.toInt()}",
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              Text("Steps selecionado \n${stepLevel?.value ?? "Sem STEP"}", style: const TextStyle(fontSize: 20.0))
+              Text("Steps selecionado \n${stepLevel.value != 0 ? stepLevel.value : "Sem STEP"}", style: const TextStyle(fontSize: 20.0))
              ]),
             ],
             ),
@@ -100,24 +98,19 @@ class DevicePower extends ItemAbstract
   Widget getCustomOption() {
         return Obx(()=> Column(
             children:[ 
-              DropdownButton<String>(
-                 items : items.map((String dropDownStringItem) {
-                  return DropdownMenuItem<String>(
-                       value : dropDownStringItem,
-                       child : Text(dropDownStringItem),
+              DropdownButton<int>(
+                 items : items.map((int dropDownItem) {
+                  return DropdownMenuItem<int>(
+                       value : dropDownItem,
+                       child : Text(dropDownItem.toString()),
                 ); 
                }).toList(),
-               value: stepLevel?.value?.toString() ?? "0",
-               onChanged: (String? novoItemSelecionado) {
-                    var item = int.parse(novoItemSelecionado ?? "0");
-                   if(item > 0){
-                      stepLevel?.value = item;
-                      return;                                    
-                    }
-                    stepLevel?.value = null;
+               value: stepLevel.value,
+               onChanged: (int? novoItemSelecionado) {
+                  stepLevel.value = novoItemSelecionado;                          
               },
           ), 
-              Text("Passos: ${stepLevel?.value ?? "Sem STEP"}", style: TextStyle(fontSize: 20.0))           
+              Text("Passos: ${stepLevel.value != 0 ? stepLevel.value : "Sem STEP"} ", style: TextStyle(fontSize: 20.0))           
           ]
         ),
         );
@@ -127,17 +120,21 @@ class DevicePower extends ItemAbstract
       @override
       void loadCustomData() {
           final element = dispositive?.customData?.firstWhereOrNull((element) => element.key.contains("key1"));
-          if(items.contains(element?.value)){
-            stepLevel?.value = element?.value ?? null;
-          }else{
-            stepLevel?.value = null;
+          if(element == null) return;
+          if(items.contains(element.value)){
+            stepLevel.value = element.value;
+            return;
           }
+          stepLevel.value = 0;
       }
     
     @override
     List<CustomData> createCustomData() {
       List<CustomData> customData = [];
-      customData.add(CustomData(key: "key1",value: stepLevel?.value));
+      if(stepLevel.value == 0){
+        return customData;
+      }
+      customData.add(CustomData(key: "key1",value: stepLevel.value));
       return customData;
     }
 }

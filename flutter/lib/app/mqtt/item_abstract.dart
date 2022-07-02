@@ -1,11 +1,11 @@
 import 'package:application/app/model/custom_data.dart';
 import 'package:application/app/model/database/dispositivo_model.dart';
 import 'package:flutter/material.dart';
-abstract class ItemAbstract
+abstract class TipoDispositivoAbstract
 {
   final Dispositivo? dispositive;
 
-  ItemAbstract({this.dispositive});
+  TipoDispositivoAbstract({this.dispositive});
 
   Widget getView();
 
