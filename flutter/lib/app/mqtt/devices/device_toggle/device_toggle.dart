@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class DeviceToggle extends TipoDispositivoAbstract 
 {
 
-  Rx<String>? messagePayload = Rx<String>("");
+  Rx<String>? messagePayload = Rx<String>("Desconectado");
   RxBool toggleButton = false.obs;
 
   MQTTClient? mqttClient;
@@ -28,9 +28,6 @@ class DeviceToggle extends TipoDispositivoAbstract
   
   @override
   void onConnect(){
-    if(dispositive == null || mqttClient == null){
-      return;
-    }
    mqttClient = MQTTClient(dispositive!, (data) {
           messagePayload!.value = data.message!["status"] ? 'Ativo' : 'Inativo';
       });
@@ -46,7 +43,7 @@ class DeviceToggle extends TipoDispositivoAbstract
       return;
     }
     toggleButton.value = !toggleButton.value;
-    var message = MessagePayload(message: {"status":mqttTranslator(toggleButton.value)}, event: 0);
+    var message = MessagePayload(message: {"status":toggleButton.value}, event: 0);
     mqttClient?.sendMessage(message);
   }
   

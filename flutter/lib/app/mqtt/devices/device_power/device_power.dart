@@ -37,7 +37,7 @@ class DevicePower extends TipoDispositivoAbstract
   
   @override
   void onConnect(){
-    if(dispositive == null || mqttClient == null){
+    if(dispositive == null){
       return;
     }
    mqttClient = MQTTClient(dispositive!, (data) {

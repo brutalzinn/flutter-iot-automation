@@ -33,8 +33,10 @@ class Dispositivo {
 
   DeviceType obterTipo() => DeviceType.values[tipoId];
   
-  definirTipo(DeviceType tipo) {
-    this.tipoId = tipo.toId;
+  definirTipo([DeviceType? tipo]) {
+    if(tipo != null){
+      this.tipoId = tipo.toId;
+    }
     _configurarEspecialidade();
   } 
 

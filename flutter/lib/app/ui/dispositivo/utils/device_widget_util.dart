@@ -8,6 +8,8 @@ DeviceType tipoIdToDeviceType(int id){
  }
 
 Widget onPreviewWidget(Dispositivo dispositivo){
+  //olha a treta comecando aqui, meu rei. Estamos jogando fora o fluxograma da entidade de dispositivo
+    dispositivo.definirTipo();
     dispositivo.obterEspecialidade().onConnect();
     return dispositivo.obterEspecialidade().getView();
 }
